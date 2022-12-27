@@ -1,6 +1,16 @@
+
+
+from hetpy.utils.utils import generateNodeId
+
+
 class Node:
     """
     TODO: Add docstrings
     """
-    def __init__(self) -> None:
-        pass
+
+    id: str
+    type: str
+
+    def __init__(self, type) -> None:
+        self.id = generateNodeId()
+        self.type = type
