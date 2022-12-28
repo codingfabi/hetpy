@@ -8,6 +8,10 @@ class TestClasses(unittest.TestCase):
         node = Node("MockType")
         self.assertEqual(node.type, "MockType")
 
+    def failing_test(self):
+        node = Node("MockType")
+        self.assertEqual(node.type, "asdfasfas")
+
 
 
 if __name__ == '__main__':
