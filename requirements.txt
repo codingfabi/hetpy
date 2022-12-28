@@ -3,7 +3,7 @@ certifi==2022.12.7
 charset-normalizer==2.1.1
 commonmark==0.9.1
 docutils==0.19
-hetpy @ file:///Users/I542771/Documents/GitHub/hetpy
+hetpy @ ./hetpy
 idna==3.4
 igraph==0.10.2
 importlib-metadata==5.2.0
