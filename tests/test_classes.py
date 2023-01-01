@@ -1,6 +1,6 @@
 import unittest
 
-from hetpy import Node, Edge, HetGraph
+from hetpy import Node, Edge
 
 class TestClasses(unittest.TestCase):
 
@@ -8,7 +8,7 @@ class TestClasses(unittest.TestCase):
         node = Node("MockType")
         self.assertEqual(node.type, "MockType")
 
-    def failing_test(self):
+    def test_failing(self):
         node = Node("MockType")
         self.assertEqual(node.type, "asdfasfas")
 
