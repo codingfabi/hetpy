@@ -9,7 +9,7 @@ igraph = "*"
 hetpy = {path = "."}
 twine = "*"
 coverage = "*"
-
+coverage-badge = "*"
 [dev-packages]
 
 [requires]
@@ -18,3 +18,4 @@ python_version = "3.10"
 [scripts]
 test = "coverage run -m unittest discover tests"
 coverage = "coverage report -m"
+coverage_badge = "coverage-badge -o coverage.svg"
