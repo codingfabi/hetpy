@@ -8,6 +8,7 @@ setuptools = "*"
 igraph = "*"
 hetpy = {path = "."}
 twine = "*"
+coverage = "*"
 
 [dev-packages]
 
@@ -15,4 +16,5 @@ twine = "*"
 python_version = "3.10"
 
 [scripts]
-test = "python -m unittest discover tests"
+test = "coverage run -m unittest discover tests"
+coverage = "coverage report -m"
