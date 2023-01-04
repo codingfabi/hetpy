@@ -10,6 +10,8 @@ hetpy = {path = "."}
 twine = "*"
 coverage = "*"
 coverage-badge = "*"
+wheel = "*"
+
 [dev-packages]
 
 [requires]
