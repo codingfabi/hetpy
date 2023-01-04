@@ -1,5 +1,6 @@
 """Initialize all classes"""
 
 
-from .edge import Edge
 from .node import Node
+from .edge import Edge
+from .hetGraph import HetGraph

@@ -1,6 +1,5 @@
-
-
 from hetpy.utils.utils import generateNodeId
+
 
 
 class Node:
