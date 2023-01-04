@@ -1,4 +1,4 @@
-__version__ = '0.0.1'
+__version__ = '0.0.1a'
 __author__ = 'Fabian Kneissl'
 __credits__ = 'Database Systems Research Group | Heidelberg University'
 

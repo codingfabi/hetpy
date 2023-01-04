@@ -1,5 +1,3 @@
-
-
 from hetpy.utils.utils import generateNodeId
 
 
