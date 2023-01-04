@@ -1,6 +1,7 @@
 from hetpy.utils.utils import generateNodeId
 
 
+
 class Node:
     """
     TODO: Add docstrings
