@@ -1,4 +1,6 @@
 from typing import List
+
+from .hetPaths import HetPaths
 from .node import Node
 from .edge import Edge
 
@@ -18,15 +20,22 @@ class HetGraph:
 
     graph: ig.Graph
 
+    paths: HetPaths
+
 
     __nodeIdStore = {}
     __graphNodeStore = {}
 
-    def __init__(self, nodes: List[Node], edges: List[Edge]) -> None:
+    def __init__(self, nodes: List[Node], edges: List[Edge], pathList: HetPaths = {}) -> None:
+        """
+        TODO: Add docstrings
+        """
         self.nodes = nodes
         self.edges = edges
         self.nodeTypes = set([node.type for node in nodes])
         self.edgeTypes = set([edge.type for edge in edges])
+
+        self.paths = pathList
         
         # create igraph instance iteratively
         self.graph = ig.Graph()
@@ -43,9 +52,15 @@ class HetGraph:
 
 
     def _mapNodeToIGraphVertex(self, node: Node):
+        """
+        TODO: Add docstrings
+        """
         return self.graph.vs[self.__nodeIdStore[node.id]]
 
     def _mapEdgeToIGraphEdge(self, edge: Edge):
+        """
+        TODO: Add docstrings
+        """
         for e in self.graph.es:
             if self.__graphNodeStore[e.source] == edge.nodes[0].id and self.__graphNodeStore[e.target] == edge.nodes[1].id and e["Type"] == edge.type:
                 return e
