@@ -1,4 +1,4 @@
 import uuid
 
 def generateNodeId():
-    return uuid.uuid4()
+    return str(uuid.uuid4())
