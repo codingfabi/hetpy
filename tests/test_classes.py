@@ -14,6 +14,12 @@ class TestClasses(unittest.TestCase):
         edge = Edge(mockSourceNode, mockTargetNode, False, "MockEdgeType")
         self.assertEqual(edge.type, "MockEdgeType")
 
+    def test_edgeDefaultType(self):
+        mockSourceNode = Node("MockType1")
+        mockTargetNode = Node("MockType2")
+        edge = Edge(mockSourceNode, mockTargetNode, False)
+        self.assertEqual(edge.type, "")
+
     def test_hetGraph(self):
         nodes = [Node("MockType1"),Node("MockType1"),Node("MockType2"),Node("MockType3")]
         edges = [Edge(nodes[0],nodes[2],False,"MockEdgeType1"), Edge(nodes[1], nodes[3],False,"MockEdgeType2")]

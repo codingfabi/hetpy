@@ -11,7 +11,7 @@ class Edge:
     directed: bool
     type: str
 
-    def __init__(self, source: Node, target: Node, directed: bool, type: str) -> None:
+    def __init__(self, source: Node, target: Node, directed: bool, type: str = '') -> None:
         self.nodes = (source, target)
         self.directed = directed
         self.type = type
