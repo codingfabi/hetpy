@@ -1,5 +1,7 @@
 from typing import List
 
+from hetpy.models.metaPath import MetaPath
+
 from .hetPaths import HetPaths
 from .node import Node
 from .edge import Edge
@@ -24,6 +26,7 @@ class HetGraph:
     graph: ig.Graph
 
     paths: HetPaths
+    metaPaths: List[MetaPath]
 
 
     __nodeIdStore = {}
@@ -54,7 +57,7 @@ class HetGraph:
         self.__assertEdgeTypes()
 
 
-    def __init__(self, nodes: List[Node], edges: List[Edge], pathList: HetPaths = {}) -> None:
+    def __init__(self, nodes: List[Node], edges: List[Edge], pathList: HetPaths = {}, metaPaths: List[MetaPath] = []) -> None:
         """
         TODO: Add docstrings
         """
@@ -64,6 +67,7 @@ class HetGraph:
         self.edgeTypes = set([edge.type for edge in edges])
 
         self.paths = pathList
+        self.metaPaths = metaPaths
 
         # infer edge types if some are not defined
         undefined_edge_types = [edge.type == '' for edge in self.edges]
@@ -107,3 +111,16 @@ class HetGraph:
         for e in self.graph.es:
             if self.__graphNodeStore[e.source] == edge.nodes[0].id and self.__graphNodeStore[e.target] == edge.nodes[1].id and e["Type"] == edge.type:
                 return e
+
+    def getDefinedMetaPaths(self) -> dict:
+        """
+        Function that returns the meta paths defined on the HetGraph as a dictionary
+        Returns:
+        ------------
+        metapath_dict : dit
+            The meta paths defined on the HetGraph in a dictionary. Uses the abbreviation as key and the edge type sequence as values.
+        """
+        graph_dict = {}
+        for metapath in self.metaPaths:
+            graph_dict[metapath.abbreviation] = metapath.path
+        return graph_dict
