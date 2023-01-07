@@ -45,7 +45,7 @@ class HetGraph:
             edge_type = edge.type
             defined_type = self.paths[edge.nodes[0].type, edge.nodes[1].type]
             if edge_type is not defined_type:
-                raise TypeException(f"Some defined edge types to not match the defined paths: {edge_type} | {defined_type}! Abborting graph creation.")
+                raise TypeException(f"Some defined edge types do not match the defined paths: {edge_type} | {defined_type}! Abborting graph creation.")
 
     def _performTypeEssertions(self) -> None:
         """

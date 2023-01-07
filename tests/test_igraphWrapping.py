@@ -55,7 +55,7 @@ class TestClasses(unittest.TestCase):
         with self.assertRaises(Exception) as context:
             graph = HetGraph(nodes, edges, paths)
 
-        self.assertTrue("Some defined edge types to not match the defined paths" in str(context.exception))
+        self.assertTrue("Some defined edge types do not match the defined paths" in str(context.exception))
 
 
 
