@@ -1,6 +1,6 @@
 import unittest
 
-from hetpy import Node, Edge, HetGraph
+from hetpy import Node, Edge, HetGraph, HetPaths
 
 class TestClasses(unittest.TestCase):
 
@@ -14,6 +14,12 @@ class TestClasses(unittest.TestCase):
         edge = Edge(mockSourceNode, mockTargetNode, False, "MockEdgeType")
         self.assertEqual(edge.type, "MockEdgeType")
 
+    def test_edgeDefaultType(self):
+        mockSourceNode = Node("MockType1")
+        mockTargetNode = Node("MockType2")
+        edge = Edge(mockSourceNode, mockTargetNode, False)
+        self.assertEqual(edge.type, "")
+
     def test_hetGraph(self):
         nodes = [Node("MockType1"),Node("MockType1"),Node("MockType2"),Node("MockType3")]
         edges = [Edge(nodes[0],nodes[2],False,"MockEdgeType1"), Edge(nodes[1], nodes[3],False,"MockEdgeType2")]
@@ -23,6 +29,16 @@ class TestClasses(unittest.TestCase):
         self.assertEqual(hetGraphObject.edgeTypes, {"MockEdgeType1","MockEdgeType2"})
         self.assertEqual(len(hetGraphObject.nodes), 4)
         self.assertEqual(len(hetGraphObject.edges), 2)
+
+    def test_hetPaths(self):
+        node_types = [(("MockNodeType1","MockNodeType2"), "EdgeType1"),(("MockNodeType1","MockNodeType3"), "EdgeType2")]
+        paths = HetPaths(node_types)
+        self.assertEqual(paths["MockNodeType1","MockNodeType2"], "EdgeType1")
+        self.assertEqual(paths["MockNodeType1","MockNodeType3"], "EdgeType2")
+
+    def test_hetPathsEmptyArguments(self):
+        paths = HetPaths()
+        self.assertEqual(paths, {})
 
 
 
