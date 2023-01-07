@@ -90,6 +90,9 @@ class HetGraph:
         self.graph.add_edges(igraph_edges)
         self.graph.es["Type"]=igraph_edge_types
 
+        if any([edge.directed for edge in self.edges]):
+            self.graph.to_directed()
+
 
     def _mapNodeToIGraphVertex(self, node: Node):
         """

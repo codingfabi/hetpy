@@ -27,6 +27,13 @@ class TestClasses(unittest.TestCase):
             igraphEdge = hetGraphObject._mapEdgeToIGraphEdge(edge)
             self.assertEqual(igraphEdge["Type"], edge.type)
 
+    def test_castGraphToDirected(self):
+        nodes = [Node("MockType1"),Node("MockType1"),Node("MockType2"),Node("MockType3")]
+        edges = [Edge(nodes[0],nodes[2],False,"MockEdgeType1"), Edge(nodes[1], nodes[3],True,"MockEdgeType2")]
+        hetGraphObject = HetGraph(nodes, edges)
+
+        self.assertEqual(hetGraphObject.graph.is_directed(), True)
+
     def test_edgeTypeInfering(self):
         nodes = [Node("MockType1"),Node("MockType1"),Node("MockType2"),Node("MockType3")]
         edges = [Edge(nodes[0],nodes[2],False,"EdgeType1"), Edge(nodes[1], nodes[3],False)]
