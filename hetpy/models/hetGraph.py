@@ -1,4 +1,5 @@
 from typing import List
+from hetpy.expections.commonExceptions import AlreadyDefinedException, NotDefinedException
 
 from hetpy.models.metaPath import MetaPath
 
@@ -7,7 +8,7 @@ from .node import Node
 from .edge import Edge
 
 # exceptions
-from hetpy.expections.typeException import TypeException
+from hetpy.expections.typeExceptions import TypeException
 
 import igraph as ig
 
@@ -124,3 +125,30 @@ class HetGraph:
         for metapath in self.metaPaths:
             graph_dict[metapath.abbreviation] = metapath.path
         return graph_dict
+
+    def addMetaPath(self, metapath: MetaPath) -> None: 
+        """
+        Function that adds a meta path to the already existing heterogeneous graph. 
+        Attributes:
+        --------------
+        metapath : MetPath
+            The meta path that is supposed to be added to the graph.
+        """
+        if metapath.abbreviation not in self.getDefinedMetaPaths().keys():
+            self.metaPaths.append(metapath)
+        else:
+            raise AlreadyDefinedException(f"A metapath with the abbreviaton {metapath.abbreviation}")
+
+    def removeMetaPath(self, metapath_abbreviation: str) -> None: 
+        """
+        Removes the specified metapath from the graph definition. 
+        Attributes:
+        -----------------
+        metapath_abbreviation : str
+            The abbreviation by which the meta path that is supposed to be removed is defined.
+        """
+        if metapath_abbreviation in self.getDefinedMetaPaths().keys():
+            remove_index = [metapath.abbreviation for metapath in self.metaPaths].index(metapath_abbreviation)
+            del self.metaPaths[remove_index]
+        else:
+            raise NotDefinedException(f"Metapath {metapath_abbreviation}")
