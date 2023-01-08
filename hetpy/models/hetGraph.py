@@ -51,7 +51,7 @@ class HetGraph:
             if edge_type is not defined_type:
                 raise TypeException(f"Some defined edge types do not match the defined paths: {edge_type} | {defined_type}! Abborting graph creation.")
 
-    def _performTypeEssertions(self) -> None:
+    def _performTypeAssertions(self) -> None:
         """
         A wrapper function that performs all type assertions during graph creation.
         """
@@ -79,7 +79,7 @@ class HetGraph:
 
         if len(pathList.keys()) > 0:
             # perform assertions
-            self._performTypeEssertions()
+            self._performTypeAssertions()
         
         
         # create igraph instance iteratively
