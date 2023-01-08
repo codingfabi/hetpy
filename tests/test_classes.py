@@ -45,6 +45,7 @@ class TestClasses(unittest.TestCase):
         self.assertEqual(metaPath.path, ["EdgeType1","EdgeType2","EdgeType3"])
         self.assertEqual(metaPath.description, "A Mock Metapath")
         self.assertEqual(metaPath.abbreviation, "123")
+        self.assertEqual(metaPath.length, 3)
 
 
 
