@@ -1,6 +1,6 @@
 import unittest
 
-from hetpy import Node, Edge, HetGraph, HetPaths
+from hetpy import Node, Edge, HetGraph, HetPaths, MetaPath
 
 class TestClasses(unittest.TestCase):
 
@@ -39,6 +39,14 @@ class TestClasses(unittest.TestCase):
     def test_hetPathsEmptyArguments(self):
         paths = HetPaths()
         self.assertEqual(paths, {})
+
+    def test_metaPaths(self):
+        metaPath = MetaPath(["EdgeType1","EdgeType2","EdgeType3"], "A Mock Metapath", "123")
+        self.assertEqual(metaPath.path, ["EdgeType1","EdgeType2","EdgeType3"])
+        self.assertEqual(metaPath.description, "A Mock Metapath")
+        self.assertEqual(metaPath.abbreviation, "123")
+        self.assertEqual(metaPath.length, 3)
+
 
 
 
