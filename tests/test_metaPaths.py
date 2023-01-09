@@ -107,3 +107,6 @@ class TestClasses(unittest.TestCase):
             graph.removeMetaPath('mck3')
 
         self.assertTrue("Metapath mck3" in str(context.exception))
+
+if __name__ == '__main__':
+    unittest.main()
