@@ -1,8 +1,9 @@
 from hetpy.models import Node, Edge, HetGraph
 
 import pandas as pd
+from ast import literal_eval
 
-def fromCSV(filepath: str, type_column: str, connection_column: str, consider_edge_directions = False) -> HetGraph:
+def fromCSV(filepath: str,type_column: str, connection_column: str, consider_edge_directions = False,  index_column: str = "index", node_attribute_column_map: dict = {}) -> HetGraph:
     """
     Returns a heterogeneous graph object mapped from a csv file. Consideres every row to be a node.
     Attributes: 
@@ -14,7 +15,7 @@ def fromCSV(filepath: str, type_column: str, connection_column: str, consider_ed
     connection_column : str
         The column that specifies to which nodes other nodes connects
     """
-    data  = pd.read_csv(filepath)
+    data = pd.read_csv(filepath)
     nodes = []
     edges = []
 
@@ -22,14 +23,17 @@ def fromCSV(filepath: str, type_column: str, connection_column: str, consider_ed
 
     # preliminary create all nodes. Needed to create correct edge objects.
     for row in data.to_dict("records"):
-        node = Node(row["type_column"])
-        index_to_nodeid_map[row["index"]] = node.id
+        node_attributes = {}
+        for key, value in node_attribute_column_map.items():
+            node_attributes[key] = row[value]
+        node = Node(row[type_column], node_attributes)
+        index_to_nodeid_map[str(row[index_column])] = node.id
         nodes.append(node)
     
     for row in data.to_dict("records"):
-        for entry in row[connection_column]:
-            source = nodes[[node.id for node in nodes].index(index_to_nodeid_map[row["index"]])]
-            target = index_to_nodeid_map[str(entry)]
+        for entry in literal_eval(row[connection_column]):
+            source = nodes[[node.id for node in nodes].index(index_to_nodeid_map[str(row[index_column])])]
+            target = nodes[[node.id for node in nodes].index(index_to_nodeid_map[str(entry)])]
             edge = Edge(source, target, directed=consider_edge_directions)
             edges.append(edge)
 

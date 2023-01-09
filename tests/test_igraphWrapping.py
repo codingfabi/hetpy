@@ -38,6 +38,8 @@ class TestClasses(unittest.TestCase):
         hetGraphObject = HetGraph(nodes, edges)
 
         self.assertEqual(hetGraphObject.graph.is_directed(), True)
+        self.assertEqual(hetGraphObject.graph.degree(mode="out"), [1,1,0,0])
+        self.assertEqual(hetGraphObject.graph.degree(mode="in"), [0,0,1,1])
 
     def test_edgeTypeInfering(self):
         nodes = [Node("MockType1"),Node("MockType1"),Node("MockType2"),Node("MockType3")]

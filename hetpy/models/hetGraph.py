@@ -83,7 +83,7 @@ class HetGraph:
         
         
         # create igraph instance iteratively
-        self.graph = ig.Graph()
+        self.graph = ig.Graph(directed=any([edge.directed for edge in self.edges]))
         self.graph.add_vertices(len(nodes))
         for index, node in enumerate(nodes):
             self.__nodeIdStore[node.id] = index
@@ -101,9 +101,6 @@ class HetGraph:
         for index, edge in enumerate(self.graph.es):
             for key, value in edges[index].attributes.items():
                 edge[key] = value
-
-        if any([edge.directed for edge in self.edges]):
-            self.graph.to_directed()
 
 
     def _mapNodeToIGraphVertex(self, node: Node):

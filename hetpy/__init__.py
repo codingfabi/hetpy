@@ -8,3 +8,6 @@ from .models.edge import Edge
 from .models.hetGraph import HetGraph
 from .models.hetPaths import HetPaths, NodeTypeTuple, EdgeTypeMapping
 from .models.metaPath import MetaPath
+
+
+from .graphUtils.graphCreationUtils import fromCSV
