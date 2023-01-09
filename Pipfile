@@ -12,6 +12,7 @@ coverage = "*"
 coverage-badge = "*"
 wheel = "*"
 pandas = "*"
+matplotlib = "*"
 
 [dev-packages]
 

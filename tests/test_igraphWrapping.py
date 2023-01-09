@@ -1,4 +1,5 @@
 import unittest
+import matplotlib.pyplot as plt
 
 from hetpy import Node, Edge, HetGraph, HetPaths
 
@@ -136,6 +137,63 @@ class TestClasses(unittest.TestCase):
         
         self.assertTrue("Edgetype UndefinedEdgeType does not exist" in str(context.exception))
 
+    def test_graphPlotting(self):
+        print("plot")
+        graph = createSimpleMockHetGraph()
+
+        color_dict = {
+            "MockType1": "orange",
+            "MockType2": "red",
+            "MockType3": "pink"
+        }
+        fig, ax = plt.subplots()
+        graph.plot(
+            type_color_map=color_dict,
+            axis = ax
+        )
+        fig.savefig('tests/test_data/mockPlot.png')
+
+    def test_graphPlottingWithVisualOptions(self):
+        print("styed plot")
+        nodes = [Node("MockType1", {"Name": "Node1"}),Node("MockType1", {"Name": "Node2"}),Node("MockType2", {"Name": "Node3"}),Node("MockType3", {"Name": "Node4"})]
+        edges = [Edge(nodes[0],nodes[2],False,"MockEdgeType1", {"Name": "Edge1"}), Edge(nodes[1], nodes[3],False,"MockEdgeType2", {"Name": "Edge2"})]
+        graph = HetGraph(nodes, edges)
+
+        color_dict = {
+            "MockType1": "orange",
+            "MockType2": "red",
+            "MockType3": "pink"
+        }
+
+        visual_style = {}
+        visual_style["vertex_size"] = 0.1
+        visual_style["vertex_label"] = graph.graph.vs["Name"]
+        visual_style["edge_width"] = 1
+        visual_style["edge_label"] = graph.graph.es["Type"]
+        visual_style["bbox"] = (800, 800)
+        visual_style["margin"] = 20
+
+        fig, ax = plt.subplots()
+        graph.plot(type_color_map = color_dict, axis=ax, plot_args = visual_style)
+
+        fig.savefig('tests/test_data/styledMockPlot.png')
+
+    def test_directedGraphPlotting(self):
+        print("directed plot")
+        nodes = [Node("MockType1"),Node("MockType1"),Node("MockType2"),Node("MockType3")]
+        edges = [Edge(nodes[0],nodes[2],False,"MockEdgeType1"), Edge(nodes[1], nodes[3],True,"MockEdgeType2")]
+        hetGraphObject = HetGraph(nodes, edges)
+        color_dict = {
+            "MockType1": "orange",
+            "MockType2": "red",
+            "MockType3": "pink"
+        }
+        fig, ax = plt.subplots()
+        hetGraphObject.plot(
+            type_color_map=color_dict,
+            axis = ax
+        )
+        fig.savefig('tests/test_data/directedMockPlot.png')
 
 if __name__ == '__main__':
     unittest.main()

@@ -194,3 +194,23 @@ class HetGraph:
         else:
             raise NotDefinedException(f"Edgetype {type} does not exist in the graph")
         return selected_edges
+
+    def plot(self, type_color_map: dict, layout = "random", axis = None, plot_args: dict = {}) -> None:
+        """
+        Plots the graph onto the specified matplotlib axis.
+        Attributes:
+        ----------------
+        """
+
+        vertex_colors = []
+        if len(type_color_map.keys()) > 0:
+            vertex_colors = [type_color_map[type] for type in self.graph.vs["Type"]]
+        
+        ig.plot(
+            self.graph,
+            layout=layout,
+            vertex_color=vertex_colors,
+            target=axis,
+            **plot_args
+        )
+
