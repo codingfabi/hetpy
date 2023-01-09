@@ -7,12 +7,39 @@ class TestClasses(unittest.TestCase):
     def test_node(self):
         node = Node("MockType")
         self.assertEqual(node.type, "MockType")
+
+    def test_nodeAttributes(self):
+        mockNodeAttributes = {
+            "name": "AMockNode",
+            "color": "green"
+        }
+        node = Node("MockType", mockNodeAttributes)
+        self.assertEqual(node.type, "MockType")
+        self.assertEqual(node.attributes, mockNodeAttributes)
     
     def test_edge(self):
         mockSourceNode = Node("MockType1")
         mockTargetNode = Node("MockType2")
         edge = Edge(mockSourceNode, mockTargetNode, False, "MockEdgeType")
         self.assertEqual(edge.type, "MockEdgeType")
+
+    def test_directedEdge(self):
+        mockSourceNode = Node("MockType1")
+        mockTargetNode = Node("MockType2")
+        edge = Edge(mockSourceNode, mockTargetNode, True, "MockEdgeType")
+        self.assertEqual(edge.type, "MockEdgeType")
+        self.assertEqual(edge.directed, True)
+
+    def test_edgeAttributes(self):
+        mockSourceNode = Node("MockType1")
+        mockTargetNode = Node("MockType2")
+        edgeAttributes = {
+            "weight": 2,
+            "color":  "red"
+        }
+        edge = Edge(mockSourceNode, mockTargetNode, False, "MockEdgeType", edgeAttributes)
+        self.assertEqual(edge.type, "MockEdgeType")
+        self.assertEqual(edge.attributes, edgeAttributes)
 
     def test_edgeDefaultType(self):
         mockSourceNode = Node("MockType1")

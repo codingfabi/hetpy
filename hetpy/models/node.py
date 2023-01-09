@@ -10,6 +10,10 @@ class Node:
     id: str
     type: str
 
-    def __init__(self, type) -> None:
+    attributes: dict
+
+    def __init__(self, type: str, attributes: dict = {}) -> None:
         self.id = generateNodeId()
         self.type = type
+
+        self.attributes = attributes
