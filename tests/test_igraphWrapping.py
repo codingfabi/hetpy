@@ -138,7 +138,6 @@ class TestClasses(unittest.TestCase):
         self.assertTrue("Edgetype UndefinedEdgeType does not exist" in str(context.exception))
 
     def test_graphPlotting(self):
-        print("plot")
         graph = createSimpleMockHetGraph()
 
         color_dict = {
@@ -154,7 +153,6 @@ class TestClasses(unittest.TestCase):
         fig.savefig('tests/test_data/mockPlot.png')
 
     def test_graphPlottingWithVisualOptions(self):
-        print("styed plot")
         nodes = [Node("MockType1", {"Name": "Node1"}),Node("MockType1", {"Name": "Node2"}),Node("MockType2", {"Name": "Node3"}),Node("MockType3", {"Name": "Node4"})]
         edges = [Edge(nodes[0],nodes[2],False,"MockEdgeType1", {"Name": "Edge1"}), Edge(nodes[1], nodes[3],False,"MockEdgeType2", {"Name": "Edge2"})]
         graph = HetGraph(nodes, edges)
@@ -179,7 +177,6 @@ class TestClasses(unittest.TestCase):
         fig.savefig('tests/test_data/styledMockPlot.png')
 
     def test_directedGraphPlotting(self):
-        print("directed plot")
         nodes = [Node("MockType1"),Node("MockType1"),Node("MockType2"),Node("MockType3")]
         edges = [Edge(nodes[0],nodes[2],False,"MockEdgeType1"), Edge(nodes[1], nodes[3],True,"MockEdgeType2")]
         hetGraphObject = HetGraph(nodes, edges)

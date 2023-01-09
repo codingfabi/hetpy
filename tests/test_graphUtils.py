@@ -1,6 +1,8 @@
 import unittest
 
 from hetpy import fromCSV
+from hetpy.models.hetPaths import HetPaths
+from hetpy.models.metaPath import MetaPath
 
 
 class TestUtils(unittest.TestCase):
@@ -31,3 +33,14 @@ class TestUtils(unittest.TestCase):
 
         self.assertEqual(mockGraph.graph.degree(mode="in"), [0,0,0,3,3,1,1])
         self.assertEqual(mockGraph.graph.degree(mode="out"), [1,2,1,1,1,1,1])
+
+    def test_createGraphWithPathsFromCSV(self):
+        column_attribute_map = {"Name": "name"}
+        edge_type_mappings = [(("Player","Club"), "played for"),(("Club","Stadium"),"owns"),(("Stadium","Club"),"belongs to")]
+        meta_paths = [MetaPath(["Player", "Club", "Stadium"], "played in", "PI")]
+        paths = HetPaths(edge_type_mappings)
+        mockGraph = fromCSV('tests/test_data/simple_csv_test.csv','type','links_to',consider_edge_directions=True, node_attribute_column_map=column_attribute_map, graphArgs={"pathList": paths, "metaPaths": meta_paths})
+
+        self.assertEqual(mockGraph.edgeTypes, {'played for', 'owns', 'belongs to'})
+        self.assertEqual(mockGraph.paths, {("Player","Club"): "played for", ("Club","Stadium"): "owns", ("Stadium","Club"): "belongs to"})
+        self.assertEqual(mockGraph.getDefinedMetaPaths(), {"PI": ["Player","Club","Stadium"]})
