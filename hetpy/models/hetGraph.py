@@ -89,11 +89,18 @@ class HetGraph:
             self.__nodeIdStore[node.id] = index
             self.__graphNodeStore[index] = node.id
             self.graph.vs[index]["Type"] = node.type
+            for key, value in node.attributes.items():
+                self.graph.vs[index][key] = value
         
         igraph_edges = [(self.__nodeIdStore[edge.nodes[0].id],self.__nodeIdStore[edge.nodes[1].id]) for edge in self.edges]
         igraph_edge_types = [edge.type for edge in self.edges]
         self.graph.add_edges(igraph_edges)
-        self.graph.es["Type"]=igraph_edge_types
+        
+        # add edge attributes to igraph edges
+        self.graph.es["Type"] = igraph_edge_types
+        for index, edge in enumerate(self.graph.es):
+            for key, value in edges[index].attributes.items():
+                edge[key] = value
 
         if any([edge.directed for edge in self.edges]):
             self.graph.to_directed()

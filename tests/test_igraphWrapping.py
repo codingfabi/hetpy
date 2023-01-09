@@ -57,6 +57,42 @@ class TestClasses(unittest.TestCase):
 
         self.assertTrue("Some defined edge types do not match the defined paths" in str(context.exception))
 
+    def test_nodeAttributeWrapping(self):
+        nodes = [Node("MockType1", {"Name": "Node1"}),Node("MockType1", {"Name" : "Node2"}),Node("MockType2", {"Color": "Red"}),Node("MockType3", {"Name": "Node4"})]
+        edges = [Edge(nodes[0],nodes[2],False,"MockEdgeType1"), Edge(nodes[1], nodes[3],False,"MockEdgeType2")]
+        hetGraphObject = HetGraph(nodes, edges)
+
+        self.assertEqual(len(hetGraphObject.graph.vs), 4)
+        self.assertEqual(len(hetGraphObject.graph.es), 2)
+        self.assertEqual(hetGraphObject.graph.is_directed(), False)
+        self.assertEqual(hetGraphObject.graph.degree(), [1,1,1,1])
+
+        self.assertEqual(hetGraphObject.graph.vs[0]["Name"], "Node1")
+        self.assertEqual(hetGraphObject.graph.vs[1]["Name"], "Node2")
+        self.assertEqual(hetGraphObject.graph.vs[2]["Color"], "Red")
+        self.assertEqual(hetGraphObject.graph.vs[3]["Name"], "Node4")
+            
+        # undefined attributes should be None
+        self.assertEqual(hetGraphObject.graph.vs[0]["Color"], None)
+        self.assertEqual(hetGraphObject.graph.vs[2]["Name"], None)
+
+    def test_edgeAttributeWrapping(self):
+        nodes = [Node("MockType1"),Node("MockType1"),Node("MockType2"),Node("MockType3")]
+        edges = [Edge(nodes[0],nodes[2],False,"MockEdgeType1",{"Weight": 20}), Edge(nodes[1], nodes[3],False,"MockEdgeType2", {"Color": "Red"})]
+        hetGraphObject = HetGraph(nodes, edges)
+
+        self.assertEqual(len(hetGraphObject.graph.vs), 4)
+        self.assertEqual(len(hetGraphObject.graph.es), 2)
+        self.assertEqual(hetGraphObject.graph.is_directed(), False)
+        self.assertEqual(hetGraphObject.graph.degree(), [1,1,1,1])
+
+        self.assertEqual(hetGraphObject.graph.es[0]["Weight"], 20)
+        self.assertEqual(hetGraphObject.graph.es[1]["Color"], "Red")
+
+        # undefined attributes should be None
+        self.assertEqual(hetGraphObject.graph.es[1]["Weight"], None)
+        self.assertEqual(hetGraphObject.graph.es[0]["Color"], None)
+
 
 
 if __name__ == '__main__':
