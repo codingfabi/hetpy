@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='hetpy',
-    version='0.0.1a',
+    version='0.1.0',
     description='A package to handle heterogeneous information networks',
     url='https://github.com/codingfabi/hetpy',
     author='Fabian Kneissl',
