@@ -64,8 +64,6 @@ class HetGraph:
         """
         self.nodes = nodes
         self.edges = edges
-        self.nodeTypes = set([node.type for node in nodes])
-        self.edgeTypes = set([edge.type for edge in edges])
 
         self.paths = pathList
         self.metaPaths = metaPaths
@@ -80,6 +78,9 @@ class HetGraph:
         if len(pathList.keys()) > 0:
             # perform assertions
             self._performTypeAssertions()
+        
+        self.nodeTypes = set([node.type for node in nodes])
+        self.edgeTypes = set([edge.type for edge in edges])
         
         
         # create igraph instance iteratively

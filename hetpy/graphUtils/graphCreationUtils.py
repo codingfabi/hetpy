@@ -3,7 +3,7 @@ from hetpy.models import Node, Edge, HetGraph
 import pandas as pd
 from ast import literal_eval
 
-def fromCSV(filepath: str,type_column: str, connection_column: str, consider_edge_directions = False,  index_column: str = "index", node_attribute_column_map: dict = {}) -> HetGraph:
+def fromCSV(filepath: str,type_column: str, connection_column: str, consider_edge_directions = False,  index_column: str = "index", node_attribute_column_map: dict = {}, graphArgs: dict = {} ) -> HetGraph:
     """
     Returns a heterogeneous graph object mapped from a csv file. Consideres every row to be a node.
     Attributes: 
@@ -37,7 +37,7 @@ def fromCSV(filepath: str,type_column: str, connection_column: str, consider_edg
             edge = Edge(source, target, directed=consider_edge_directions)
             edges.append(edge)
 
-    hetGraph = HetGraph(nodes, edges)
+    hetGraph = HetGraph(nodes, edges, **graphArgs)
 
     return hetGraph
 
