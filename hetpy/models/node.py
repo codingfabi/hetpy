@@ -1,4 +1,4 @@
-from hetpy.utils.utils import generateNodeId
+from ..utils.utils import generateNodeId
 
 
 

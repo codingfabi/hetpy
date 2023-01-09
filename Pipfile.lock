@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "019fca90e9aa59cfb06121be704699e110929ce62e2fd8d58fc5986298238b07"
+            "sha256": "7b7731c8afeb1bdcb4e7d70cbc813d14c360a4f78189e0e0a012d02edbbfe22e"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -213,7 +213,7 @@
         },
         "hetpy": {
             "path": ".",
-            "version": "==0.0.1a"
+            "version": "==0.1.1a"
         },
         "idna": {
             "hashes": [
@@ -271,7 +271,7 @@
                 "sha256:fab10d71c5e1dac5f0948cd15c261cfb0048841e7062b1b8a581fde087928e1e",
                 "sha256:ffc46aaaebc7a0b30e07088d88ddc5a724c5561d3bacfc8539deb7bff51469fe"
             ],
-            "index": "pypi",
+            "markers": "python_version >= '3.7'",
             "version": "==0.10.3"
         },
         "importlib-metadata": {
@@ -609,6 +609,13 @@
             ],
             "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "version": "==2.8.2"
+        },
+        "python-igraph": {
+            "hashes": [
+                "sha256:bdb418f919bd16037e886a3e205db32134b172d0cb04ae030a2bf6f975c51397"
+            ],
+            "index": "pypi",
+            "version": "==0.10.3"
         },
         "pytz": {
             "hashes": [
