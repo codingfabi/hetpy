@@ -11,6 +11,7 @@ twine = "*"
 coverage = "*"
 coverage-badge = "*"
 wheel = "*"
+pandas = "*"
 
 [dev-packages]
 
