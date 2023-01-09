@@ -1,14 +1,14 @@
 from typing import List
-from hetpy.expections.commonExceptions import AlreadyDefinedException, NotDefinedException
 
-from hetpy.models.metaPath import MetaPath
 
 from .hetPaths import HetPaths
 from .node import Node
 from .edge import Edge
+from .metaPath import MetaPath
 
 # exceptions
-from hetpy.expections.typeExceptions import TypeException
+from hetpy.exceptions.typeExceptions import TypeException
+from hetpy.exceptions.commonExceptions import AlreadyDefinedException, NotDefinedException
 
 import igraph as ig
 

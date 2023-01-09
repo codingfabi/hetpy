@@ -5,7 +5,6 @@ name = "pypi"
 
 [packages]
 setuptools = "*"
-igraph = "*"
 hetpy = {path = "."}
 twine = "*"
 coverage = "*"
@@ -13,6 +12,7 @@ coverage-badge = "*"
 wheel = "*"
 pandas = "*"
 matplotlib = "*"
+python-igraph = "*"
 
 [dev-packages]
 
