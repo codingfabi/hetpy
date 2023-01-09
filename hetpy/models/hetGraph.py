@@ -159,3 +159,41 @@ class HetGraph:
             del self.metaPaths[remove_index]
         else:
             raise NotDefinedException(f"Metapath {metapath_abbreviation}")
+
+    # utility functions
+
+    def getNodesOfType(self, type : str) -> List[Node]:
+        """
+        Returns all nodes of the specified type in the graph. 
+        Attributes:
+        ------------------
+        type : str
+            The type of which nodes should be selected.
+        Returns:
+        ------------------
+        selected_nodes : List[Nodes]
+            The selected nodes of the specified type.
+        """
+        if type in self.nodeTypes:
+            selected_nodes = [node for node in self.nodes if node.type == type]
+            return selected_nodes
+        else:
+            raise NotDefinedException(f"Nodetype {type} does not exist in the graph")
+
+    def getEdgesOfType(self, type : str) -> List[Edge]:
+        """
+        Returns all edges of the specified type in the graph. 
+        Attributes:
+        ------------------
+        type : str
+            The type of which edges should be selected.
+        Returns:
+        ------------------
+        selected_edges : List[Edge]
+            The selected edges of the specified type.
+        """
+        if type in self.edgeTypes:
+            selected_edges = [edge for edge in self.edges if edge.type == type]
+        else:
+            raise NotDefinedException(f"Edgetype {type} does not exist in the graph")
+        return selected_edges
