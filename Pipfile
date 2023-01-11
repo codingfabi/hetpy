@@ -13,6 +13,7 @@ wheel = "*"
 pandas = "*"
 matplotlib = "*"
 python-igraph = "*"
+pdoc3 = "*"
 
 [dev-packages]
 
