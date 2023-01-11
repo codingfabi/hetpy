@@ -4,7 +4,7 @@ name: website
 on:
   push:
     branches:
-      - ops/doc-workflow
+      - main
     # Alternative: only build for tags.
     # tags:
     #   - '*'
