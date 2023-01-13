@@ -192,5 +192,31 @@ class TestClasses(unittest.TestCase):
         )
         fig.savefig('tests/test_data/directedMockPlot.png')
 
+    def test_addEdgeWithTypeToGraph(self):
+        hetGraph = createSimpleMockHetGraph()
+        new_edge = Edge(hetGraph.nodes[0], hetGraph.nodes[3], False, "NewType")
+        hetGraph.addEdge(new_edge)
+
+        self.assertEqual(len(hetGraph.edges), 3)
+        self.assertEqual(hetGraph.edgeTypes, {'NewType','MockEdgeType1','MockEdgeType2'})
+        
+    def test_addEdgeWithoutTypeToGraph(self):
+        hetGraph = createSimpleMockHetGraph()
+        new_edge = Edge(hetGraph.nodes[0], hetGraph.nodes[3], False)
+        hetGraph.addEdge(new_edge)
+
+        self.assertEqual(len(hetGraph.edges), 3)
+
+    def test_addNonExistingEdgeToGraph(self):
+        """Should cause exception"""
+        hetGraph = createSimpleMockHetGraph()
+        non_existing_node = Node("nonExistingType")
+        new_edge = Edge(hetGraph.nodes[0], non_existing_node, False)
+
+        with self.assertRaises(Exception) as context:
+            hetGraph.addEdge(new_edge)
+
+        self.assertTrue("One of the nodes you are trying to connect does not exist in the graph" in str(context.exception))
+
 if __name__ == '__main__':
     unittest.main()

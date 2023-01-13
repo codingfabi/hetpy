@@ -61,6 +61,28 @@ class HetGraph:
             if edge_type is not defined_type:
                 raise TypeException(f"Some defined edge types do not match the defined paths: {edge_type} | {defined_type}! Abborting graph creation.")
 
+    def __assertNodeExistence(self, node: Node) -> False:
+        """
+        Asserts if a given node exists on the graph.
+
+        Parameters:
+        ------------
+            node : Node
+                The node for which the function shall check if it is defined on the graph.
+        """
+        if node.id not in [node.id for node in self.nodes]:
+            return False
+        else:
+            return True
+
+    
+    def __setTypes(self) -> None:
+        """
+        A setter function that updates node types and edge types after a node or an edge has been added.
+        """
+        self.nodeTypes = set([node.type for node in self.nodes])
+        self.edgeTypes = set([edge.type for edge in self.edges])
+
     def _performTypeAssertions(self) -> None:
         """
         A wrapper function that performs all type assertions during graph creation.
@@ -100,8 +122,7 @@ class HetGraph:
             # perform assertions
             self._performTypeAssertions()
         
-        self.nodeTypes = set([node.type for node in nodes])
-        self.edgeTypes = set([edge.type for edge in edges])
+        self.__setTypes()
         
         
         # create igraph instance iteratively
@@ -182,6 +203,45 @@ class HetGraph:
             del self.metaPaths[remove_index]
         else:
             raise NotDefinedException(f"Metapath {metapath_abbreviation}")
+
+    def addEdge(self, edge: Edge) -> None:
+        """
+        Adds the specified edge from the graph definition.
+
+        Parameters:
+        -------------
+            edge : Edge
+                The edge that is supposed to be added.
+        """
+        for node in edge.nodes:
+            if not self.__assertNodeExistence(node):
+                raise NotDefinedException(f"One of the nodes you are trying to connect does not exist in the graph.")
+        self.edges.append(edge)
+        if edge.type == '' and len(self.paths.keys()) > 0:
+            print('Edge does not have a specified type. Infering from path definitions.')
+            self.__inferEdgeTypes()
+        self.__setTypes()
+        igraph_node_pair = (self._mapNodeToIGraphVertex(edge.nodes[0]),self._mapNodeToIGraphVertex(edge.nodes[1]))
+        self.graph.add_edge(*igraph_node_pair)
+
+    def removeEdge(self, edge: Edge) -> None:
+        """
+        Removes the specified edge from the graph.
+
+        Parameters:
+        ----------
+            edge : Edge
+                The edge that is supposed to be removed.
+        """
+        try:
+            self.edges.remove(edge)
+            self.graph.delete_edges(**self._mapEdgeToIGraphEdge(edge))
+        except ValueError:
+            raise NotDefinedException(f"The edge you are trying to remove does not exist on the graph.")
+        
+        
+
+    #def addNode(self, node: Node) -> None:       
 
     # utility functions
 
