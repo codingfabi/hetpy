@@ -15,6 +15,8 @@ You can then use the provided modules, classes and functions for your network sc
 
 # Introduction
 
+.. include:: ../demo/hetPyDemo.md
+
 '''
 
 
