@@ -15,19 +15,29 @@ import igraph as ig
 
 class HetGraph:
     """
-    TODO: Add docstrings
+    An heterogeneous graph with multiple node and edge types.
     """
 
     nodes: List[Node]
+    """The set of nodes that make up the network."""
+
     edges: List[Edge]
+    """The set of edges that connect the nodes in the network."""
 
     nodeTypes: List[str]
+    """A set of all node types that exist in the graph."""
+
     edgeTypes: List[str]
+    """A set of all edge types that exist in the graph."""
 
     graph: ig.Graph
+    """The graph instance itself."""
 
     paths: HetPaths
+    """A list of paths that exist in the graph. Maps a tuple of node types to an edge type."""
+
     metaPaths: List[MetaPath]
+    """A list of meta paths that exist in the graph."""
 
 
     __nodeIdStore = {}
@@ -35,7 +45,7 @@ class HetGraph:
 
     def __inferEdgeTypes(self) -> None:
         """
-        TODO: Add docstrings
+        Infers the types of untyped edges from the graphs path definitions.
         """
         for edge in self.edges:
                 if edge.type == '':
@@ -43,7 +53,7 @@ class HetGraph:
     
     def __assertEdgeTypes(self) -> None:
         """
-        TODO: Add docstrings
+        Asserts if all defined edge types match with the defined path definitions.
         """
         for edge in self.edges:
             edge_type = edge.type
@@ -60,7 +70,18 @@ class HetGraph:
 
     def __init__(self, nodes: List[Node], edges: List[Edge], pathList: HetPaths = {}, metaPaths: List[MetaPath] = []) -> None:
         """
-        TODO: Add docstrings
+        Maps parameters and attributes during object creation. Also creates a igraph.Graph instance from defined nodes and edges.
+
+        Parameters
+        ----------
+            nodes : List[Node]
+                List of nodes of the graph.
+            edges : List[Edge]
+                List of edges of the graph.
+            pathList : HetPaths
+                A dictionary of simple path definitions.
+            metaPaths : List[MetaPath]
+                A list of semantic meta path definitions on the graph.
         """
         self.nodes = nodes
         self.edges = edges
@@ -106,13 +127,13 @@ class HetGraph:
 
     def _mapNodeToIGraphVertex(self, node: Node):
         """
-        TODO: Add docstrings
+        Maps a node object to the coresponding igraph vertex.
         """
         return self.graph.vs[self.__nodeIdStore[node.id]]
 
     def _mapEdgeToIGraphEdge(self, edge: Edge):
         """
-        TODO: Add docstrings
+        Maps an edge to the corresponding igraph edge.
         """
         for e in self.graph.es:
             if self.__graphNodeStore[e.source] == edge.nodes[0].id and self.__graphNodeStore[e.target] == edge.nodes[1].id and e["Type"] == edge.type:
@@ -121,10 +142,12 @@ class HetGraph:
     def getDefinedMetaPaths(self) -> dict:
         """
         Function that returns the meta paths defined on the HetGraph as a dictionary
-        Returns:
+
+        Returns
         ------------
-        metapath_dict : dit
-            The meta paths defined on the HetGraph in a dictionary. Uses the abbreviation as key and the edge type sequence as values.
+            metapath_dict : dict
+                The meta paths defined on the HetGraph in a dictionary.
+                Uses the abbreviation as key and the edge type sequence as values.
         """
         graph_dict = {}
         for metapath in self.metaPaths:
@@ -133,11 +156,12 @@ class HetGraph:
 
     def addMetaPath(self, metapath: MetaPath) -> None: 
         """
-        Function that adds a meta path to the already existing heterogeneous graph. 
-        Attributes:
+        Function that adds a meta path to the already existing heterogeneous graph.
+
+        Parameters:
         --------------
-        metapath : MetPath
-            The meta path that is supposed to be added to the graph.
+            metapath : MetPath
+                The meta path that is supposed to be added to the graph.
         """
         if metapath.abbreviation not in self.getDefinedMetaPaths().keys():
             self.metaPaths.append(metapath)
@@ -147,10 +171,11 @@ class HetGraph:
     def removeMetaPath(self, metapath_abbreviation: str) -> None: 
         """
         Removes the specified metapath from the graph definition. 
-        Attributes:
+        
+        Parameters:
         -----------------
-        metapath_abbreviation : str
-            The abbreviation by which the meta path that is supposed to be removed is defined.
+            metapath_abbreviation : str
+                The abbreviation by which the meta path that is supposed to be removed is defined.
         """
         if metapath_abbreviation in self.getDefinedMetaPaths().keys():
             remove_index = [metapath.abbreviation for metapath in self.metaPaths].index(metapath_abbreviation)
@@ -163,14 +188,15 @@ class HetGraph:
     def getNodesOfType(self, type : str) -> List[Node]:
         """
         Returns all nodes of the specified type in the graph. 
-        Attributes:
+        Parameters:
         ------------------
-        type : str
-            The type of which nodes should be selected.
+            type : str
+                The type of which nodes should be selected.
+
         Returns:
         ------------------
-        selected_nodes : List[Nodes]
-            The selected nodes of the specified type.
+            selected_nodes : List[Nodes]
+                The selected nodes of the specified type.
         """
         if type in self.nodeTypes:
             selected_nodes = [node for node in self.nodes if node.type == type]
@@ -181,14 +207,16 @@ class HetGraph:
     def getEdgesOfType(self, type : str) -> List[Edge]:
         """
         Returns all edges of the specified type in the graph. 
-        Attributes:
+
+        Parameters:
         ------------------
-        type : str
-            The type of which edges should be selected.
+            type : str
+                The type of which edges should be selected.
+        
         Returns:
         ------------------
-        selected_edges : List[Edge]
-            The selected edges of the specified type.
+            selected_edges : List[Edge]
+                The selected edges of the specified type.
         """
         if type in self.edgeTypes:
             selected_edges = [edge for edge in self.edges if edge.type == type]
@@ -198,9 +226,18 @@ class HetGraph:
 
     def plot(self, type_color_map: dict, layout = "random", axis = None, plot_args: dict = {}) -> None:
         """
-        Plots the graph onto the specified matplotlib axis.
-        Attributes:
+        Plots the graph onto the specified matplotlib axis. Works as a wrapper for igraph.plot.
+
+        Parameters:
         ----------------
+            type_color_map : dict
+                A dictionary that maps a node type to a color. 
+            layout : string | igraph.layout
+                The layout in which the graph shall be plotted. Defaults to random layout.
+            axis : matplotlib.pyplot.axis
+                The matplotlib axis on which the graph shall eb plotted.
+            plot_args : dict
+                A dicitonary of additional plotting arguments that get passed to the igraph.plot function.
         """
 
         vertex_colors = []

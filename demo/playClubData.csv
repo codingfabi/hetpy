@@ -1,0 +1,8 @@
+index,type,name,links_to
+0,Player,Lionel Messi,"[4]"
+1,Player,Luis Figo,"[3, 4]"
+2,Player,Sergio Ramos,"[3]"
+3,Club,Real Madrid,"[5]"
+4,Club,FC Barcelona,"[6]"
+5,Stadium,Bernabeu,"[3]"
+6,Stadium,Camp Nou,"[4]"
