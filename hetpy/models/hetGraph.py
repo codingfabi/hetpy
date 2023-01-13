@@ -224,7 +224,7 @@ class HetGraph:
         igraph_node_pair = (self._mapNodeToIGraphVertex(edge.nodes[0]),self._mapNodeToIGraphVertex(edge.nodes[1]))
         self.graph.add_edge(*igraph_node_pair)
 
-    def removeEdge(self, edge: Edge) -> None:
+    def deleteEdge(self, edge: Edge) -> None:
         """
         Removes the specified edge from the graph.
 
@@ -235,9 +235,50 @@ class HetGraph:
         """
         try:
             self.edges.remove(edge)
-            self.graph.delete_edges(**self._mapEdgeToIGraphEdge(edge))
+            self.graph.delete_edges(self._mapEdgeToIGraphEdge(edge))
+            self.__setTypes()
         except ValueError:
             raise NotDefinedException(f"The edge you are trying to remove does not exist on the graph.")
+
+    def addNode(self, node: Node) -> None:
+        """
+        Adds the specified node to the graph.
+
+        Parameters:
+        -----------
+            node : Node
+                The node which is supposed to be added.
+        """
+        self.nodes.append(node)
+        self.__setTypes()
+        node.attributes["Type"] = node.type
+        new_igraph_vertex = self.graph.add_vertex(**node.attributes)
+        self.__nodeIdStore[node.id] = new_igraph_vertex.index
+        self.__graphNodeStore[new_igraph_vertex.index] = node.id
+
+    def deleteNode(self, node: Node) -> None:
+        """
+        Deletes a node from the graph.
+
+        Parameters:
+        -----------
+            node : Node
+                The node that is supposed to be removed.
+        """
+        if self.__assertNodeExistence(node):
+            # remove all edges that feature the node first.
+            edges_to_remove = [edge for edge in self.edges if edge.nodes[0].id == node.id or edge.nodes[1].id == node.id]
+            for edge in edges_to_remove:
+                self.deleteEdge(edge)
+            self.nodes.remove(node)
+            igraph_vertex = self._mapNodeToIGraphVertex(node)
+            self.graph.delete_vertices(igraph_vertex.index)
+            del self.__nodeIdStore[node.id]
+            del self.__graphNodeStore[igraph_vertex.index]
+            self.__setTypes()
+        else:
+            raise NotDefinedException(f"The node with id {node.id} your are trying to remove is not defined on the graph.")
+
         
         
 
