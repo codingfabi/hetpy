@@ -6,14 +6,20 @@ from ast import literal_eval
 def fromCSV(filepath: str,type_column: str, connection_column: str, consider_edge_directions = False,  index_column: str = "index", node_attribute_column_map: dict = {}, graphArgs: dict = {} ) -> HetGraph:
     """
     Returns a heterogeneous graph object mapped from a csv file. Consideres every row to be a node.
-    Attributes: 
-    -------------------
-    filepath : str
-        The path to the csv file.
-    type_column : str
-        The column in the csv file that specifies the type.
-    connection_column : str
-        The column that specifies to which nodes other nodes connects
+
+    Parameters
+    -----------
+        filepath : str
+            The path to the csv file.
+        type_column : str
+            The column in the csv file that specifies the type.
+        connection_column : str
+            The column that specifies to which nodes other nodes connects
+
+    Returns
+    ----------
+        hetGraph : hetpy.models.hetGraph.HetGraph
+            The created heterogenous graph.
     """
     data = pd.read_csv(filepath)
     nodes = []
