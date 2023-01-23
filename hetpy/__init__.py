@@ -32,4 +32,4 @@ from .models.hetPaths import HetPaths, NodeTypeTuple, EdgeTypeMapping
 from .models.metaPath import MetaPath
 
 
-from .graphUtils.graphCreationUtils import fromCSV
+from .graphUtils.graphCreationUtils import fromCSV, from_iGraph

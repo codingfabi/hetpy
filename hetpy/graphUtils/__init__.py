@@ -1,1 +1,1 @@
-from .graphCreationUtils import fromCSV
+from .graphCreationUtils import fromCSV, from_iGraph
