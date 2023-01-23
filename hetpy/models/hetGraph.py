@@ -279,10 +279,45 @@ class HetGraph:
         else:
             raise NotDefinedException(f"The node with id {node.id} your are trying to remove is not defined on the graph.")
 
-        
-        
+    # graph metric functions
 
-    #def addNode(self, node: Node) -> None:       
+    def get_node_type_dist(self, pdf=False) -> dict:
+        """
+        Calculates the distribution of node types on the graph.
+
+        Parameters:
+        -----------
+            pdf : boolean
+                Specifies whether to return the distribution as absolute values or as a probability density function.
+        """
+        distribution = {}
+        for type in self.nodeTypes:
+            distribution[type] = 0
+        for node in self.nodes:
+            distribution[node.type] += 1
+        if pdf is True:
+            distribution = {k: v / len(self.nodes) for k, v in distribution.items()}
+        
+        return distribution
+
+    def get_edge_type_dist(self, pdf=False) -> dict:
+        """
+        Calculates the distribution of edge types on the graph.
+
+        Parameters:
+        -----------
+            pdf : boolean
+                Specifies whether to return the distribution as absolute values or as a probability density function.
+        """
+        distribution = {}
+        for type in self.edgeTypes:
+            distribution[type] = 0
+        for edge in self.edges:
+            distribution[edge.type] += 1
+        if pdf is True:
+            distribution = {k: v / len(self.edges) for k, v in distribution.items()}
+        return distribution
+
 
     # utility functions
 
