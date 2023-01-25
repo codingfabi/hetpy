@@ -388,3 +388,49 @@ class HetGraph:
             **plot_args
         )
 
+    def print_network_schema(self, axis = None) -> None:
+        """
+        Prints the network schema to the specified axis. The network schema itself is a graph instance. If no axis is provided, the function prints the specified paths on the graph to the terminal
+
+        Parameters:
+        -------------
+            axis : matplotlib.pyplot.axis
+                The axis on which the schema shall be printed. If no axis is provided, the functions prints the specified paths on the graph to the terminal.
+        """
+        schema_graph_nodes = list(set(list(sum([t for t in self.paths], ())))) # hacky, find other solution
+        schema_graph = ig.Graph(directed=True)
+        schema_graph.add_vertices(len(schema_graph_nodes))
+        for index, v in enumerate(schema_graph.vs):
+            v["Name"] = schema_graph_nodes[index]
+        
+        edges = []
+        edge_types = []
+        for path, edgetype in self.paths.items():
+            source_node = schema_graph.vs.select(Name_eq=path[0])[0].index
+            target_node = schema_graph.vs.select(Name_eq=path[1])[0].index
+            edges.append((source_node, target_node))
+            edge_types.append(edgetype)
+        schema_graph.add_edges(edges)
+        schema_graph.es["Name"] = edge_types
+
+        layout = schema_graph.layout_fruchterman_reingold()
+
+        if axis is None:
+            for edge in schema_graph.es:
+                source_node = schema_graph.vs[edge.source]
+                target_node = schema_graph.vs[edge.target]
+                print(f'{source_node["Name"]} ---{edge["Name"]}---> {target_node["Name"]}')
+        else:
+            ig.plot(
+                schema_graph,
+                autocurve=True,
+                vertex_color = 'white',
+                vertex_size=0.4,
+                vertex_label= schema_graph.vs["Name"],
+                edge_label=schema_graph.es["Name"],
+                layout=layout,
+                edge_align_label=True,
+                vertex_label_size=8,
+                target=axis    
+            )
+

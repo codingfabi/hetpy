@@ -261,6 +261,30 @@ class TestClasses(unittest.TestCase):
 
         self.assertEqual(len(hetGraph.nodes), 4)
         self.assertEqual(len(hetGraph.edges), 1)
+    
+    def test_networkSchemaPlottingTerminal(self):
+        nodes = [Node("MockType1"),Node("MockType1"),Node("MockType2"),Node("MockType3")]
+        edges = [Edge(nodes[0],nodes[2],False,"EdgeType1"), Edge(nodes[1], nodes[3],False)]
+
+        edge_type_mappings = [(("MockType1","MockType2"), "EdgeType1"),(("MockType1","MockType3"), "EdgeType2"),(("MockType3","MockType4"),"EdgeType3"),(("MockType4","MockType2"),"EdgeType4"),(("MockType3","MockType5"),"EdgeType5")]
+        paths = HetPaths(edge_type_mappings)
+
+        graph = HetGraph(nodes, edges, paths)
+
+        graph.print_network_schema()
+    
+    def test_networkSchemaPlottingImage(self):
+        nodes = [Node("MockType1"),Node("MockType1"),Node("MockType2"),Node("MockType3")]
+        edges = [Edge(nodes[0],nodes[2],False,"EdgeType1"), Edge(nodes[1], nodes[3],False)]
+
+        edge_type_mappings = [(("MockType1","MockType2"), "EdgeType1"),(("MockType1","MockType3"), "EdgeType2"),(("MockType3","MockType4"),"EdgeType3"),(("MockType4","MockType2"),"EdgeType4"),(("MockType3","MockType5"),"EdgeType5")]
+        paths = HetPaths(edge_type_mappings)
+
+        graph = HetGraph(nodes, edges, paths)
+
+        fig, ax = plt.subplots(figsize=(16,9))
+        graph.print_network_schema(axis=ax)
+        fig.savefig('tests/test_data/networkSchema.png')
 
 
 if __name__ == '__main__':
