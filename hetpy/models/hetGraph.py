@@ -414,17 +414,23 @@ class HetGraph:
         schema_graph.es["Name"] = edge_types
 
         layout = schema_graph.layout_fruchterman_reingold()
-        
-        ig.plot(
-            schema_graph,
-            autocurve=True,
-            vertex_color = 'white',
-            vertex_size=0.4,
-            vertex_label= schema_graph.vs["Name"],
-            edge_label=schema_graph.es["Name"],
-            layout=layout,
-            edge_align_label=True,
-            vertex_label_size=8,
-            target=axis    
-        )
+
+        if axis is None:
+            for edge in schema_graph.es:
+                source_node = schema_graph.vs[edge.source]
+                target_node = schema_graph.vs[edge.target]
+                print(f'{source_node["Name"]} ---{edge["Name"]}---> {target_node["Name"]}')
+        else:
+            ig.plot(
+                schema_graph,
+                autocurve=True,
+                vertex_color = 'white',
+                vertex_size=0.4,
+                vertex_label= schema_graph.vs["Name"],
+                edge_label=schema_graph.es["Name"],
+                layout=layout,
+                edge_align_label=True,
+                vertex_label_size=8,
+                target=axis    
+            )
 
