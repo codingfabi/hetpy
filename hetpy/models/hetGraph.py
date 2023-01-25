@@ -390,12 +390,12 @@ class HetGraph:
 
     def print_network_schema(self, axis = None) -> None:
         """
-        Prints the network schema to the specified axis. The network schema itself is a graph instance.
+        Prints the network schema to the specified axis. The network schema itself is a graph instance. If no axis is provided, the function prints the specified paths on the graph to the terminal
 
         Parameters:
         -------------
             axis : matplotlib.pyplot.axis
-                The axis on which the schema shall be printed.
+                The axis on which the schema shall be printed. If no axis is provided, the functions prints the specified paths on the graph to the terminal.
         """
         schema_graph_nodes = list(set(list(sum([t for t in self.paths], ())))) # hacky, find other solution
         schema_graph = ig.Graph(directed=True)
