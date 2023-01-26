@@ -24,10 +24,10 @@ class HetGraph:
     edges: List[Edge]
     """The set of edges that connect the nodes in the network."""
 
-    nodeTypes: List[str]
+    node_types: List[str]
     """A set of all node types that exist in the graph."""
 
-    edgeTypes: List[str]
+    edge_types: List[str]
     """A set of all edge types that exist in the graph."""
 
     graph: ig.Graph
@@ -36,7 +36,7 @@ class HetGraph:
     paths: HetPaths
     """A list of paths that exist in the graph. Maps a tuple of node types to an edge type."""
 
-    metaPaths: List[MetaPath]
+    meta_paths: List[MetaPath]
     """A list of meta paths that exist in the graph."""
 
 
@@ -80,8 +80,8 @@ class HetGraph:
         """
         A setter function that updates node types and edge types after a node or an edge has been added.
         """
-        self.nodeTypes = set([node.type for node in self.nodes])
-        self.edgeTypes = set([edge.type for edge in self.edges])
+        self.node_types = set([node.type for node in self.nodes])
+        self.edge_types = set([edge.type for edge in self.edges])
 
     def _performTypeAssertions(self) -> None:
         """
@@ -90,7 +90,7 @@ class HetGraph:
         self.__assertEdgeTypes()
 
 
-    def __init__(self, nodes: List[Node], edges: List[Edge], pathList: HetPaths = {}, metaPaths: List[MetaPath] = []) -> None:
+    def __init__(self, nodes: List[Node], edges: List[Edge], path_list: HetPaths = {}, meta_paths: List[MetaPath] = []) -> None:
         """
         Maps parameters and attributes during object creation. Also creates a igraph.Graph instance from defined nodes and edges.
 
@@ -108,17 +108,17 @@ class HetGraph:
         self.nodes = nodes
         self.edges = edges
 
-        self.paths = pathList
-        self.metaPaths = metaPaths
+        self.paths = path_list
+        self.metaPaths = meta_paths
 
         # infer edge types if some are not defined
         undefined_edge_types = [edge.type == '' for edge in self.edges]
-        if any(undefined_edge_types) and len(pathList.keys()) > 0:
+        if any(undefined_edge_types) and len(path_list.keys()) > 0:
             print("Some edge types are undefined. Infering types from paths...")
             self.__inferEdgeTypes()
         
 
-        if len(pathList.keys()) > 0:
+        if len(path_list.keys()) > 0:
             # perform assertions
             self._performTypeAssertions()
         
@@ -160,7 +160,7 @@ class HetGraph:
             if self.__graphNodeStore[e.source] == edge.nodes[0].id and self.__graphNodeStore[e.target] == edge.nodes[1].id and e["Type"] == edge.type:
                 return e
 
-    def getDefinedMetaPaths(self) -> dict:
+    def get_meta_paths(self) -> dict:
         """
         Function that returns the meta paths defined on the HetGraph as a dictionary
 
@@ -175,7 +175,7 @@ class HetGraph:
             graph_dict[metapath.abbreviation] = metapath.path
         return graph_dict
 
-    def addMetaPath(self, metapath: MetaPath) -> None: 
+    def add_meta_path(self, metapath: MetaPath) -> None: 
         """
         Function that adds a meta path to the already existing heterogeneous graph.
 
@@ -184,12 +184,12 @@ class HetGraph:
             metapath : MetPath
                 The meta path that is supposed to be added to the graph.
         """
-        if metapath.abbreviation not in self.getDefinedMetaPaths().keys():
+        if metapath.abbreviation not in self.get_meta_paths().keys():
             self.metaPaths.append(metapath)
         else:
             raise AlreadyDefinedException(f"A metapath with the abbreviaton {metapath.abbreviation}")
 
-    def removeMetaPath(self, metapath_abbreviation: str) -> None: 
+    def remove_meta_path(self, metapath_abbreviation: str) -> None: 
         """
         Removes the specified metapath from the graph definition. 
         
@@ -198,13 +198,13 @@ class HetGraph:
             metapath_abbreviation : str
                 The abbreviation by which the meta path that is supposed to be removed is defined.
         """
-        if metapath_abbreviation in self.getDefinedMetaPaths().keys():
+        if metapath_abbreviation in self.get_meta_paths().keys():
             remove_index = [metapath.abbreviation for metapath in self.metaPaths].index(metapath_abbreviation)
             del self.metaPaths[remove_index]
         else:
             raise NotDefinedException(f"Metapath {metapath_abbreviation}")
 
-    def addEdge(self, edge: Edge) -> None:
+    def add_edge(self, edge: Edge) -> None:
         """
         Adds the specified edge from the graph definition.
 
@@ -224,7 +224,7 @@ class HetGraph:
         igraph_node_pair = (self._mapNodeToIGraphVertex(edge.nodes[0]),self._mapNodeToIGraphVertex(edge.nodes[1]))
         self.graph.add_edge(*igraph_node_pair)
 
-    def deleteEdge(self, edge: Edge) -> None:
+    def delete_edge(self, edge: Edge) -> None:
         """
         Removes the specified edge from the graph.
 
@@ -240,7 +240,7 @@ class HetGraph:
         except ValueError:
             raise NotDefinedException(f"The edge you are trying to remove does not exist on the graph.")
 
-    def addNode(self, node: Node) -> None:
+    def add_node(self, node: Node) -> None:
         """
         Adds the specified node to the graph.
 
@@ -256,7 +256,7 @@ class HetGraph:
         self.__nodeIdStore[node.id] = new_igraph_vertex.index
         self.__graphNodeStore[new_igraph_vertex.index] = node.id
 
-    def deleteNode(self, node: Node) -> None:
+    def delete_node(self, node: Node) -> None:
         """
         Deletes a node from the graph.
 
@@ -269,7 +269,7 @@ class HetGraph:
             # remove all edges that feature the node first.
             edges_to_remove = [edge for edge in self.edges if edge.nodes[0].id == node.id or edge.nodes[1].id == node.id]
             for edge in edges_to_remove:
-                self.deleteEdge(edge)
+                self.delete_edge(edge)
             self.nodes.remove(node)
             igraph_vertex = self._mapNodeToIGraphVertex(node)
             self.graph.delete_vertices(igraph_vertex.index)
@@ -291,7 +291,7 @@ class HetGraph:
                 Specifies whether to return the distribution as absolute values or as a probability density function.
         """
         distribution = {}
-        for type in self.nodeTypes:
+        for type in self.node_types:
             distribution[type] = 0
         for node in self.nodes:
             distribution[node.type] += 1
@@ -310,7 +310,7 @@ class HetGraph:
                 Specifies whether to return the distribution as absolute values or as a probability density function.
         """
         distribution = {}
-        for type in self.edgeTypes:
+        for type in self.edge_types:
             distribution[type] = 0
         for edge in self.edges:
             distribution[edge.type] += 1
@@ -321,7 +321,7 @@ class HetGraph:
 
     # utility functions
 
-    def getNodesOfType(self, type : str) -> List[Node]:
+    def get_nodes_of_type(self, type : str) -> List[Node]:
         """
         Returns all nodes of the specified type in the graph. 
         Parameters:
@@ -334,13 +334,13 @@ class HetGraph:
             selected_nodes : List[Nodes]
                 The selected nodes of the specified type.
         """
-        if type in self.nodeTypes:
+        if type in self.node_types:
             selected_nodes = [node for node in self.nodes if node.type == type]
             return selected_nodes
         else:
             raise NotDefinedException(f"Nodetype {type} does not exist in the graph")
 
-    def getEdgesOfType(self, type : str) -> List[Edge]:
+    def get_edges_of_type(self, type : str) -> List[Edge]:
         """
         Returns all edges of the specified type in the graph. 
 
@@ -354,7 +354,7 @@ class HetGraph:
             selected_edges : List[Edge]
                 The selected edges of the specified type.
         """
-        if type in self.edgeTypes:
+        if type in self.edge_types:
             selected_edges = [edge for edge in self.edges if edge.type == type]
         else:
             raise NotDefinedException(f"Edgetype {type} does not exist in the graph")

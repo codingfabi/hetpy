@@ -61,7 +61,7 @@ class TestClasses(unittest.TestCase):
         paths = HetPaths(edge_type_mappings)
 
         with self.assertRaises(Exception) as context:
-            graph = HetGraph(nodes, edges, paths)
+            HetGraph(nodes, edges, paths)
 
         self.assertTrue("Some defined edge types do not match the defined paths" in str(context.exception))
 
@@ -105,7 +105,7 @@ class TestClasses(unittest.TestCase):
         nodes = [Node("MockType1", {"Name": "Node1"}),Node("MockType1", {"Name" : "Node2"}),Node("MockType2", {"Color": "Red"}),Node("MockType3", {"Name": "Node4"})]
         edges = [Edge(nodes[0],nodes[2],False,"MockEdgeType1"), Edge(nodes[1], nodes[3],False,"MockEdgeType2")]
         hetGraphObject = HetGraph(nodes, edges)
-        returned_nodes = hetGraphObject.getNodesOfType("MockType1")
+        returned_nodes = hetGraphObject.get_nodes_of_type("MockType1")
         self.assertEqual(returned_nodes[0].attributes["Name"], "Node1")
         self.assertEqual(returned_nodes[1].attributes["Name"], "Node2")
     
@@ -116,7 +116,7 @@ class TestClasses(unittest.TestCase):
         hetGraphObject = HetGraph(nodes, edges)
         
         with self.assertRaises(Exception) as context:
-            hetGraphObject.getNodesOfType("UndefinedMockType")
+            hetGraphObject.get_nodes_of_type("UndefinedMockType")
         
         self.assertTrue("Nodetype UndefinedMockType does not exist" in str(context.exception))
 
@@ -124,7 +124,7 @@ class TestClasses(unittest.TestCase):
         nodes = [Node("MockType1"),Node("MockType1"),Node("MockType2"),Node("MockType3")]
         edges = [Edge(nodes[0],nodes[2],False,"MockEdgeType1",{"Name": "Edge1"}), Edge(nodes[1], nodes[3],False,"MockEdgeType2",{"Name": "Edge2"})]
         hetGraphObject = HetGraph(nodes, edges)
-        returned_edges = hetGraphObject.getEdgesOfType("MockEdgeType1")
+        returned_edges = hetGraphObject.get_edges_of_type("MockEdgeType1")
         self.assertEqual(returned_edges[0].attributes["Name"], "Edge1")
     
     def test_edgeTypeSelection(self):
@@ -133,7 +133,7 @@ class TestClasses(unittest.TestCase):
         hetGraphObject = HetGraph(nodes, edges)
         
         with self.assertRaises(Exception) as context:
-            hetGraphObject.getEdgesOfType("UndefinedEdgeType")
+            hetGraphObject.get_edges_of_type("UndefinedEdgeType")
         
         self.assertTrue("Edgetype UndefinedEdgeType does not exist" in str(context.exception))
 
@@ -195,15 +195,15 @@ class TestClasses(unittest.TestCase):
     def test_addEdgeWithTypeToGraph(self):
         hetGraph = createSimpleMockHetGraph()
         new_edge = Edge(hetGraph.nodes[0], hetGraph.nodes[3], False, "NewType")
-        hetGraph.addEdge(new_edge)
+        hetGraph.add_edge(new_edge)
 
         self.assertEqual(len(hetGraph.edges), 3)
-        self.assertEqual(hetGraph.edgeTypes, {'NewType','MockEdgeType1','MockEdgeType2'})
+        self.assertEqual(hetGraph.edge_types, {'NewType','MockEdgeType1','MockEdgeType2'})
         
     def test_addEdgeWithoutTypeToGraph(self):
         hetGraph = createSimpleMockHetGraph()
         new_edge = Edge(hetGraph.nodes[0], hetGraph.nodes[3], False)
-        hetGraph.addEdge(new_edge)
+        hetGraph.add_edge(new_edge)
 
         self.assertEqual(len(hetGraph.edges), 3)
 
@@ -214,32 +214,32 @@ class TestClasses(unittest.TestCase):
         new_edge = Edge(hetGraph.nodes[0], non_existing_node, False)
 
         with self.assertRaises(Exception) as context:
-            hetGraph.addEdge(new_edge)
+            hetGraph.add_edge(new_edge)
 
         self.assertTrue("One of the nodes you are trying to connect does not exist in the graph" in str(context.exception))
 
     def test_removeEdgeFromGraph(self):
         hetGraph = createSimpleMockHetGraph()
-        hetGraph.deleteEdge(hetGraph.edges[0])
+        hetGraph.delete_edge(hetGraph.edges[0])
 
         self.assertEqual(len(hetGraph.edges), 1)
         self.assertEqual(len(hetGraph.graph.es), 1)
-        self.assertEqual(hetGraph.edgeTypes, {'MockEdgeType2'})
+        self.assertEqual(hetGraph.edge_types, {'MockEdgeType2'})
         
     def test_addNodeToGraph(self):
         hetGraph = createSimpleMockHetGraph()
         new_node = Node("NewNodeType", {"NewAttr": "NewVal"})
-        hetGraph.addNode(new_node)
+        hetGraph.add_node(new_node)
 
         self.assertEqual(len(hetGraph.nodes), 5)
-        self.assertEqual(hetGraph.nodeTypes, {'NewNodeType','MockType1','MockType2','MockType3'})
+        self.assertEqual(hetGraph.node_types, {'NewNodeType','MockType1','MockType2','MockType3'})
 
         igraph_node = hetGraph._mapNodeToIGraphVertex(new_node)
         self.assertEqual(igraph_node["NewAttr"], "NewVal")
 
     def test_deleteNodeFromGraph(self):
         hetGraph = createSimpleMockHetGraph()
-        hetGraph.deleteNode(hetGraph.nodes[0])
+        hetGraph.delete_node(hetGraph.nodes[0])
 
         self.assertEqual(len(hetGraph.nodes), 3)
         self.assertEqual(len(hetGraph.graph.vs), 3)
@@ -251,13 +251,13 @@ class TestClasses(unittest.TestCase):
         new_node = Node("NewNodeType", {"MockAttr": "MockValue"})
         new_edge = Edge(new_node, hetGraph.nodes[0], False)
 
-        hetGraph.addNode(new_node)
-        hetGraph.addEdge(new_edge)
+        hetGraph.add_node(new_node)
+        hetGraph.add_edge(new_edge)
 
         self.assertEqual(len(hetGraph.nodes), 5)
         self.assertEqual(len(hetGraph.edges), 3)
 
-        hetGraph.deleteNode(hetGraph.nodes[0])
+        hetGraph.delete_node(hetGraph.nodes[0])
 
         self.assertEqual(len(hetGraph.nodes), 4)
         self.assertEqual(len(hetGraph.edges), 1)
