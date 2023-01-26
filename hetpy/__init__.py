@@ -1,7 +1,6 @@
 r'''
-# HetPy?
 
-HetPy is a python module that provides simplified handling of heterogeneous information networks by wrapping and utilizing popule python package iGraph.
+HetPy is a python module that provides simplified handling of heterogeneous information networks by wrapping and utilizing populare python package [iGraph](https://igraph.readthedocs.io/en/stable/).
 
 # How to install HetPy?
 
