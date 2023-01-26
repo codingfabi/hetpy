@@ -13,7 +13,7 @@ class TestUtils(unittest.TestCase):
         column_attribute_map = {"Name": "name"}
         mockGraph = fromCSV('tests/test_data/simple_csv_test.csv','type','links_to',consider_edge_directions=False, node_attribute_column_map=column_attribute_map)
         
-        self.assertEqual(mockGraph.nodeTypes, {'Player','Club','Stadium'})
+        self.assertEqual(mockGraph.node_types, {'Player','Club','Stadium'})
         self.assertEqual(mockGraph.nodes[0].attributes["Name"], "Lionel Messi")
         self.assertEqual(mockGraph.nodes[-1].type, "Stadium")
         self.assertEqual(mockGraph.nodes[-1].attributes["Name"], "Camp Nou")
@@ -26,7 +26,7 @@ class TestUtils(unittest.TestCase):
         column_attribute_map = {"Name": "name"}
         mockGraph = fromCSV('tests/test_data/simple_csv_test.csv','type','links_to',consider_edge_directions=True, node_attribute_column_map=column_attribute_map)
         
-        self.assertEqual(mockGraph.nodeTypes, {'Player','Club','Stadium'})
+        self.assertEqual(mockGraph.node_types, {'Player','Club','Stadium'})
         self.assertEqual(mockGraph.nodes[0].attributes["Name"], "Lionel Messi")
         self.assertEqual(mockGraph.nodes[-1].type, "Stadium")
         self.assertEqual(mockGraph.nodes[-1].attributes["Name"], "Camp Nou")
@@ -41,11 +41,11 @@ class TestUtils(unittest.TestCase):
         edge_type_mappings = [(("Player","Club"), "played for"),(("Club","Stadium"),"owns"),(("Stadium","Club"),"belongs to")]
         meta_paths = [MetaPath(["Player", "Club", "Stadium"], "played in", "PI")]
         paths = HetPaths(edge_type_mappings)
-        mockGraph = fromCSV('tests/test_data/simple_csv_test.csv','type','links_to',consider_edge_directions=True, node_attribute_column_map=column_attribute_map, graphArgs={"pathList": paths, "metaPaths": meta_paths})
+        mockGraph = fromCSV('tests/test_data/simple_csv_test.csv','type','links_to',consider_edge_directions=True, node_attribute_column_map=column_attribute_map, graphArgs={"path_list": paths, "meta_paths": meta_paths})
 
-        self.assertEqual(mockGraph.edgeTypes, {'played for', 'owns', 'belongs to'})
+        self.assertEqual(mockGraph.edge_types, {'played for', 'owns', 'belongs to'})
         self.assertEqual(mockGraph.paths, {("Player","Club"): "played for", ("Club","Stadium"): "owns", ("Stadium","Club"): "belongs to"})
-        self.assertEqual(mockGraph.getDefinedMetaPaths(), {"PI": ["Player","Club","Stadium"]})
+        self.assertEqual(mockGraph.get_meta_paths(), {"PI": ["Player","Club","Stadium"]})
 
     def test_graphFromIGraph(self):
         graph = ig.Graph()
@@ -62,8 +62,8 @@ class TestUtils(unittest.TestCase):
 
         het_graph = from_iGraph(graph, path_list = paths)
 
-        self.assertEqual(het_graph.nodeTypes, {"TypeA","TypeB","TypeC"})
-        self.assertEqual(het_graph.edgeTypes, {"EdgeType1","EdgeType2","EdgeType3"})
+        self.assertEqual(het_graph.node_types, {"TypeA","TypeB","TypeC"})
+        self.assertEqual(het_graph.edge_types, {"EdgeType1","EdgeType2","EdgeType3"})
 
         self.assertEqual(het_graph.nodes[0].attributes["iGraphIndex"],0)
         self.assertEqual(het_graph.nodes[0].attributes["Color"],"Red")
@@ -103,8 +103,8 @@ class TestUtils(unittest.TestCase):
 
         het_graph = from_iGraph(graph, type_attribute = "type", path_list = paths)
 
-        self.assertEqual(het_graph.nodeTypes, {"TypeA","TypeB","TypeC"})
-        self.assertEqual(het_graph.edgeTypes, {"EdgeType1","EdgeType2","EdgeType3"})
+        self.assertEqual(het_graph.node_types, {"TypeA","TypeB","TypeC"})
+        self.assertEqual(het_graph.edge_types, {"EdgeType1","EdgeType2","EdgeType3"})
 
         self.assertEqual(het_graph.nodes[0].attributes["iGraphIndex"],0)
         self.assertEqual(het_graph.nodes[0].attributes["Color"],"Red")

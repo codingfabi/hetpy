@@ -22,7 +22,7 @@ class TestClasses(unittest.TestCase):
             "mck2": ["EdgeType2","EdgeType1"]
         }
         
-        self.assertEqual(graph.getDefinedMetaPaths(), expected_dict)
+        self.assertEqual(graph.get_meta_paths(), expected_dict)
 
     def test_addMetaPathRetrospectively(self):
         nodes = [Node("MockType1"),Node("MockType1"),Node("MockType2"),Node("MockType3")]
@@ -33,15 +33,15 @@ class TestClasses(unittest.TestCase):
         paths = HetPaths(edge_type_mappings)
 
         graph = HetGraph(nodes, edges, paths)
-        self.assertEqual(graph.getDefinedMetaPaths(), {})
+        self.assertEqual(graph.get_meta_paths(), {})
         self.assertEqual(graph.metaPaths, [])
 
         expected_dict = {
             "mck" : ["EdgeType1","EdgeType3"],
         }
 
-        graph.addMetaPath(mockMetaPath)
-        self.assertEqual(graph.getDefinedMetaPaths(), expected_dict)
+        graph.add_meta_path(mockMetaPath)
+        self.assertEqual(graph.get_meta_paths(), expected_dict)
 
     def test_redundantMetapathDefinition(self):
         """
@@ -62,11 +62,11 @@ class TestClasses(unittest.TestCase):
             "mck2": ["EdgeType2","EdgeType1"]
         }
         
-        self.assertEqual(graph.getDefinedMetaPaths(), expected_dict)
+        self.assertEqual(graph.get_meta_paths(), expected_dict)
 
         duplicateMetaPath = MetaPath(["EdgeType2","EdgeType3"], "A redundant meta path", "mck2")
         with self.assertRaises(Exception) as context:
-            graph.addMetaPath(duplicateMetaPath)
+            graph.add_meta_path(duplicateMetaPath)
 
         self.assertTrue("A metapath with the abbreviaton mck2" in str(context.exception))
 
@@ -81,13 +81,13 @@ class TestClasses(unittest.TestCase):
 
         graph = HetGraph(nodes, edges, paths, [mockMetaPath, secondMockMetaPath])
 
-        graph.removeMetaPath("mck")
+        graph.remove_meta_path("mck")
 
         expected_dict = {
             "mck2": ["EdgeType2","EdgeType1"]
         }
 
-        self.assertEqual(graph.getDefinedMetaPaths(), expected_dict)
+        self.assertEqual(graph.get_meta_paths(), expected_dict)
 
     def test_nonExistingMetapathRemoval(self):
         """
@@ -104,7 +104,7 @@ class TestClasses(unittest.TestCase):
         graph = HetGraph(nodes, edges, paths, [mockMetaPath, secondMockMetaPath])
 
         with self.assertRaises(Exception) as context:
-            graph.removeMetaPath('mck3')
+            graph.remove_meta_path('mck3')
 
         self.assertTrue("Metapath mck3" in str(context.exception))
 

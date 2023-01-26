@@ -52,8 +52,8 @@ class TestClasses(unittest.TestCase):
         edges = [Edge(nodes[0],nodes[2],False,"MockEdgeType1"), Edge(nodes[1], nodes[3],False,"MockEdgeType2")]
         hetGraphObject = HetGraph(nodes, edges)
 
-        self.assertEqual(hetGraphObject.nodeTypes, {"MockType1","MockType2","MockType3"})
-        self.assertEqual(hetGraphObject.edgeTypes, {"MockEdgeType1","MockEdgeType2"})
+        self.assertEqual(hetGraphObject.node_types, {"MockType1","MockType2","MockType3"})
+        self.assertEqual(hetGraphObject.edge_types, {"MockEdgeType1","MockEdgeType2"})
         self.assertEqual(len(hetGraphObject.nodes), 4)
         self.assertEqual(len(hetGraphObject.edges), 2)
 
