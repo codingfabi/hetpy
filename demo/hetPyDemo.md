@@ -10,7 +10,7 @@ import pandas as pd
 import itertools
 ```
 
-#### Create a simple graph with 2 types and one edge type
+#### Create a simple graph with two node types and one edge type
 
 HetPy functions as a standard graph library which uses strongly typed node and edge objects. To create a basic, simple graph, we first create a standard set of two nodes and a single edge that connects those nodes.
 
@@ -32,7 +32,8 @@ color_map = {
     "MockType2": "pink"
 }
 visual_style = {
-    "vertex_label": [node.type for node in [node, node_two]]
+    "vertex_label": [node.type for node in [node, node_two]],
+    "vertex_label_size": 10
 }
 fig, ax = plt.subplots()
 graph.plot(type_color_map=color_map, axis=ax, plot_args=visual_style)
@@ -44,12 +45,11 @@ graph.plot(type_color_map=color_map, axis=ax, plot_args=visual_style)
     
 
 
-While this graph is quite simple, we can also define edge types by the node tyes they connect and add a list of these paths to the graph. These semantic paths then enable us to infer edge types while creating the graph. Furthermore, we can add attribtues to the nodes that are handeled just like normal attributes.
+While this graph is quite simple, we can also define edge types by specifying the node types they connect and add a list of these paths to the graph. These semantic paths then enable us to infer edge types while creating the graph. Furthermore, we can add attribtues to the nodes that are handeled just like normal attributes.
 
 
 ```python
 # define paths
-
 edge_type_mappings = [(("Player","Club"),"played_for"), (("Club", "Shirt"),"wears")]
 paths = HetPaths(edge_type_mappings)
 ```
@@ -74,11 +74,11 @@ edges = [
 
 ```
 
-Then we can create a hetGraph out of the defined objects. You will notice that during creation, the graph constructor will report that some edges have a undefined type and that the type will be infered from the paths assigned to it. After creation, we can check if all edge types are correctly inferred.
+Then we can create a HetGraph out of the defined objects. You will notice that during creation, the graph constructor will report that some edges have a undefined type and that the type will be infered from the paths assigned to it. After creation, we can check if all edge types are correctly inferred.
 
 
 ```python
-hetGraph = HetGraph(nodes, edges, paths)
+het_graph = HetGraph(nodes, edges, paths)
 ```
 
     Some edge types are undefined. Infering types from paths...
@@ -86,36 +86,88 @@ hetGraph = HetGraph(nodes, edges, paths)
 
 
 ```python
-print(hetGraph.edgeTypes)
+print(het_graph.edgeTypes)
 ```
 
-    {'played_for', 'wears'}
+    {'wears', 'played_for'}
+
+
+The HetGraph class asserts also automaticall asserts the defined edge types. If they do not match the specified paths, an error is raised during the object creation.
+
+
+```python
+# assign wrong type to edge
+wrong_edges = edges.copy()
+wrong_edges[0].type = "wears"
+
+HetGraph(nodes, wrong_edges, paths)
+```
+
+
+    ---------------------------------------------------------------------------
+
+    TypeException                             Traceback (most recent call last)
+
+    /Users/I542771/Documents/GitHub/hetpy/demo/hetPyDemo.ipynb Cell 21 in <cell line: 5>()
+          <a href='vscode-notebook-cell:/Users/I542771/Documents/GitHub/hetpy/demo/hetPyDemo.ipynb#X54sZmlsZQ%3D%3D?line=1'>2</a> wrong_edges = edges.copy()
+          <a href='vscode-notebook-cell:/Users/I542771/Documents/GitHub/hetpy/demo/hetPyDemo.ipynb#X54sZmlsZQ%3D%3D?line=2'>3</a> wrong_edges[0].type = "wears"
+    ----> <a href='vscode-notebook-cell:/Users/I542771/Documents/GitHub/hetpy/demo/hetPyDemo.ipynb#X54sZmlsZQ%3D%3D?line=4'>5</a> HetGraph(nodes, wrong_edges, paths)
+
+
+    File /opt/homebrew/lib/python3.10/site-packages/hetpy/models/hetGraph.py:80, in HetGraph.__init__(self, nodes, edges, pathList, metaPaths)
+         75     self.__inferEdgeTypes()
+         78 if len(pathList.keys()) > 0:
+         79     # perform assertions
+    ---> 80     self._performTypeAssertions()
+         82 self.nodeTypes = set([node.type for node in nodes])
+         83 self.edgeTypes = set([edge.type for edge in edges])
+
+
+    File /opt/homebrew/lib/python3.10/site-packages/hetpy/models/hetGraph.py:58, in HetGraph._performTypeAssertions(self)
+         54 def _performTypeAssertions(self) -> None:
+         55     """
+         56     A wrapper function that performs all type assertions during graph creation.
+         57     """
+    ---> 58     self.__assertEdgeTypes()
+
+
+    File /opt/homebrew/lib/python3.10/site-packages/hetpy/models/hetGraph.py:52, in HetGraph.__assertEdgeTypes(self)
+         50 defined_type = self.paths[edge.nodes[0].type, edge.nodes[1].type]
+         51 if edge_type is not defined_type:
+    ---> 52     raise TypeException(f"Some defined edge types do not match the defined paths: {edge_type} | {defined_type}! Abborting graph creation.")
+
+
+    TypeException: A type error occured: Some defined edge types do not match the defined paths: wears | played_for! Abborting graph creation.
 
 
 We can then again use the plotting approach to visualize our HetGraph.
 
 
 ```python
-nodes = hetGraph.nodes
+nodes = het_graph.nodes
 vertex_labels = [node.attributes["Name"] for node in nodes[:-2]]
 vertex_labels = vertex_labels + [node.attributes["shirt_color"] for node in nodes[-2:]]
 color_map = {
-    "Player": "black",
+    "Player": "orange",
     "Club": "pink",
     "Shirt": "white"
 }
 visual_style = {
     "vertex_label": vertex_labels,
-    "edge_label": [edge.type for edge in hetGraph.edges]
+    "vertex_size": 0.3,
+    "vertex_label_size": 8,
+    "edge_label": [edge.type for edge in het_graph.edges],
+    "edge_label_size": 8,
+    "edge_align_label": True
 }
-layout = hetGraph.graph.layout_kamada_kawai()
+layout = het_graph.graph.layout_kamada_kawai()
 fig, ax = plt.subplots()
-hetGraph.plot(type_color_map=color_map, axis=ax, plot_args=visual_style, layout=layout)
+het_graph.plot(type_color_map=color_map, axis=ax, plot_args=visual_style, layout=layout)
 ```
 
 
     
-![png](../demo/hetPyDemo_files/hetPyDemo_14_0.png)
+![png](../demo/hetPyDemo_files/hetPyDemo_16_0.png)
     
 
 
@@ -130,7 +182,7 @@ paths = HetPaths(edge_type_mappings)
 
 print(paths)
 
-hasPlayedInMetaPath = MetaPath([paths[('Player','Club')], paths[('Club','Shirt')]], "The player has played in a certain shirt color", "hasPlayedIn")
+hasPlayedInMetaPath = MetaPath(path=["played_for","wears"], description="The player has played in a certain shirt color", abbreviation="hasPlayedIn")
 ```
 
     {('Player', 'Club'): 'played_for', ('Club', 'Shirt'): 'wears'}
@@ -198,7 +250,7 @@ hetGraphWithMetaPaths.getDefinedMetaPaths()
 
 #### Create a graph from a .csv file
 
-HetPy provides a utility function to create a heterogeneous graph from a .csv file. For pracitcallity reasons, we assume each row of the .csv file to be a node and create edges by specifying the row indices to which a node connects in a special column. 
+HetPy provides a utility function to create a heterogeneous graph from a .csv file. For pracitcality reasons, we assume each row of the .csv file to be a node and create edges by specifying the row indices to which a node connects in a special column. 
 
 
 ```python
@@ -209,7 +261,7 @@ Consider the following column structure in our demo .csv file:
 
 
 ```python
-data = pd.read_csv('./playClubData.csv')
+data = pd.read_csv('./playClubData.csv', index_col="index")
 data
 ```
 
@@ -234,58 +286,56 @@ data
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>index</th>
       <th>type</th>
       <th>name</th>
       <th>links_to</th>
+    </tr>
+    <tr>
+      <th>index</th>
+      <th></th>
+      <th></th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>0</td>
       <td>Player</td>
       <td>Lionel Messi</td>
       <td>[4]</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>1</td>
       <td>Player</td>
       <td>Luis Figo</td>
       <td>[3, 4]</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>2</td>
       <td>Player</td>
       <td>Sergio Ramos</td>
       <td>[3]</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>3</td>
       <td>Club</td>
       <td>Real Madrid</td>
       <td>[5]</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>4</td>
       <td>Club</td>
       <td>FC Barcelona</td>
       <td>[6]</td>
     </tr>
     <tr>
       <th>5</th>
-      <td>5</td>
       <td>Stadium</td>
       <td>Bernabeu</td>
       <td>[3]</td>
     </tr>
     <tr>
       <th>6</th>
-      <td>6</td>
       <td>Stadium</td>
       <td>Camp Nou</td>
       <td>[4]</td>
@@ -300,16 +350,47 @@ We specify the type column and the foreign key column as function parameters and
 
 
 ```python
-column_attribute_map = {"Name": "name"}
-mockGraph = fromCSV('./playClubData.csv','type','links_to',consider_edge_directions=False, node_attribute_column_map=column_attribute_map)
+column_attribute_map = {'Name': 'name'}
+mock_graph = fromCSV('./playClubData.csv','type','links_to',consider_edge_directions=False, node_attribute_column_map=column_attribute_map)
 
-mockGraph.nodeTypes
+mock_graph.nodeTypes
 ```
 
 
 
 
     {'Club', 'Player', 'Stadium'}
+
+
+
+The function also allows to pass arguments directly to the graphs initialization function as a dictionary. This way, we can also sepcify a network schema and a list of meta paths for the graph we want to create from a csv file.
+
+
+```python
+edge_type_mappings = [(("Player","Club"),"played_for"), (("Club", "Stadium"),"plays_in"), (('Stadium', 'Club'),"is_owned_by")]
+paths = HetPaths(edge_type_mappings)
+
+has_played_in_meta_path = MetaPath(path=["played_for","wears"], description="The player has played in a certain shirt color", abbreviation="hasPlayedIn")
+
+graph_args = {
+    'pathList': paths,
+    'metaPaths': [has_played_in_meta_path]
+}
+
+loaded_graph = fromCSV('./playClubData.csv','type','links_to',consider_edge_directions=False, node_attribute_column_map=column_attribute_map, graphArgs=graph_args)
+
+loaded_graph.paths
+```
+
+    Some edge types are undefined. Infering types from paths...
+
+
+
+
+
+    {('Player', 'Club'): 'played_for',
+     ('Club', 'Stadium'): 'plays_in',
+     ('Stadium', 'Club'): 'is_owned_by'}
 
 
 
@@ -321,16 +402,16 @@ type_color_map = {
     "Stadium": "blue"
 }
 
-layout = mockGraph.graph.layout_kamada_kawai()
+layout = loaded_graph.graph.layout_kamada_kawai()
 
 fig, ax = plt.subplots()
 
-mockGraph.plot(type_color_map=type_color_map, axis=ax, layout=layout)
+loaded_graph.plot(type_color_map=type_color_map, axis=ax, layout=layout)
 
 ```
 
 
     
-![png](../demo/hetPyDemo_files/hetPyDemo_31_0.png)
+![png](../demo/hetPyDemo_files/hetPyDemo_33_0.png)
     
 
