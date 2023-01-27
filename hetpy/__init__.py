@@ -32,3 +32,4 @@ from .models.metaPath import MetaPath
 
 
 from .graphUtils.graphCreationUtils import fromCSV, from_iGraph
+from .graphUtils.metaProjections import create_meta_projection
