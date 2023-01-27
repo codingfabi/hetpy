@@ -237,6 +237,23 @@ class TestClasses(unittest.TestCase):
         igraph_node = hetGraph._mapNodeToIGraphVertex(new_node)
         self.assertEqual(igraph_node["NewAttr"], "NewVal")
 
+    def test_findEdge(self):
+        het_graph = createSimpleMockHetGraph()
+        
+        retrieved_edge = het_graph.find_edge(het_graph.nodes[0], het_graph.nodes[2])
+        self.assertEqual(retrieved_edge, het_graph.edges[0])
+    
+    def test_findNonexistingEdge(self):
+        """
+        Should throw exception
+        """
+        het_graph = createSimpleMockHetGraph()
+
+        retrieved_edge = het_graph.find_edge(het_graph.nodes[0],het_graph.nodes[1])
+        
+        self.assertIsNone(retrieved_edge)
+
+
     def test_deleteNodeFromGraph(self):
         hetGraph = createSimpleMockHetGraph()
         hetGraph.delete_node(hetGraph.nodes[0])
