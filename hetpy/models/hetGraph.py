@@ -152,6 +152,9 @@ class HetGraph:
         """
         return self.graph.vs[self.__nodeIdStore[node.id]]
 
+    def _mapIGraphVertexToNode(self, vertex: ig.Vertex):
+        return self.nodes[[node.id for node in self.nodes].index(self.__graphNodeStore[vertex.index])]
+
     def _mapEdgeToIGraphEdge(self, edge: Edge):
         """
         Maps an edge to the corresponding igraph edge.
@@ -203,6 +206,24 @@ class HetGraph:
             del self.metaPaths[remove_index]
         else:
             raise NotDefinedException(f"Metapath {metapath_abbreviation}")
+
+    def find_edge(self, source: Node, target: Node) -> Edge | None:
+        """
+        Finds an edge between two nodes in the graph. If there is no edge, returns none.
+        
+        Parameters:
+        -----------
+            source : hetpy.Node
+                The source node of the particular edge.
+            target : hetpy.Node
+                The target node of the particular edge.
+        """
+        source_target_tuples = [(edge.source.id, edge.target.id) for edge in self.edges]
+        try:
+            index = source_target_tuples.index((source.id, target.id))
+            return self.edges[index]
+        except ValueError:
+            return None
 
     def add_edge(self, edge: Edge) -> None:
         """
