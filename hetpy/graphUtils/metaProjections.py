@@ -52,7 +52,6 @@ def __combine_multi_edges(edges: list[Edge], combine_edges: CombineEdgeTypes) ->
                 attributes['Weight'] = count
         edge.attributes = attributes
         combined_edges.append(edge)
-    print(vars(combined_edges[0]))
     return combined_edges
 
 
