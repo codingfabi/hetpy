@@ -47,8 +47,7 @@ def __combine_multi_edges(edges: list[Edge], combine_edges: CombineEdgeTypes) ->
     for node_tuple, count in counter.items():
         edge = Edge(node_tuple[0],node_tuple[1], type=edge_type, directed=any([edge.directed for edge in edges]))
         attributes = {}
-        match combine_edges:
-            case CombineEdgeTypes.SUM:
+        if combine_edges is CombineEdgeTypes.SUM:
                 attributes['Weight'] = count
         edge.attributes = attributes
         combined_edges.append(edge)
