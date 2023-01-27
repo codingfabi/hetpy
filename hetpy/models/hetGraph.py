@@ -207,7 +207,7 @@ class HetGraph:
         else:
             raise NotDefinedException(f"Metapath {metapath_abbreviation}")
 
-    def find_edge(self, source: Node, target: Node) -> Edge | None:
+    def find_edge(self, source: Node, target: Node):
         """
         Finds an edge between two nodes in the graph. If there is no edge, returns none.
         
