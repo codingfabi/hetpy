@@ -5,6 +5,8 @@ from hetpy.models.hetPaths import HetPaths
 from hetpy.models.metaPath import MetaPath
 from hetpy.models import Node, Edge, HetGraph
 
+from hetpy.enums import CombineEdgeTypes
+
 import igraph as ig
 
 def createSimpleMockHetGraph():
@@ -134,9 +136,10 @@ class TestUtils(unittest.TestCase):
 
         het_graph = HetGraph(nodes, edges, paths, [mockMetaPath, secondMockMetaPath])
 
-        projection = create_meta_projection(het_graph, mockMetaPath)
+        projection = create_meta_projection(het_graph, mockMetaPath, True)
 
         self.assertTrue(projection.find_edge(nodes[0], nodes[3]) is not None) # check if edge is defined in projection
+        self.assertTrue(projection.find_edge(nodes[0], nodes[3]).directed is True) # check if projection creation function respects direction argument
         self.assertTrue(projection.find_edge(nodes[4], nodes[3]) is not None) # check if edge is defined in projection
         self.assertTrue(projection.find_edge(nodes[4], nodes[6]) is not None) # check if edge is defined in projection
 
@@ -144,6 +147,75 @@ class TestUtils(unittest.TestCase):
         self.assertTrue(projection.find_edge(nodes[1], nodes[6]) is None) # check if edge is defined in projection
         self.assertTrue(projection.find_edge(nodes[0], nodes[2]) is None) # check if edge is defined in projection
 
+    def test_metaProjectionShouldFailForUndefinedPaths(self):
+        nodes = [Node("MockType1"),Node("MockType1"),Node("MockType2"),Node("MockType3"),Node("MockType1"),Node("MockType2"),Node("MockType3")]
+        edges = [Edge(nodes[0],nodes[2],False,"EdgeType1"), Edge(nodes[1], nodes[3],False,"EdgeType2"),
+                Edge(nodes[2], nodes[3], False, "EdgeType3"),Edge(nodes[5], nodes[3], False, "EdgeType3"),
+                Edge(nodes[4], nodes[5], False, "EdgeType1"),Edge(nodes[5], nodes[6], False, "EdgeType3"),
+                Edge(nodes[4], nodes[6], False, "EdgeType2")]
 
+        edge_type_mappings = [(("MockType1","MockType2"), "EdgeType1"),(("MockType1","MockType3"), "EdgeType2"),(("MockType2","MockType3"), "EdgeType3")]
+        mockMetaPath = MetaPath(["EdgeType1", "EdgeType3"], "A mock meta path", "mck")
+        secondMockMetaPath = MetaPath(["EdgeType2","EdgeType1"], "Another, non existend mock meta path", "mck2")
+        paths = HetPaths(edge_type_mappings)
+
+        het_graph = HetGraph(nodes, edges, paths, [mockMetaPath, secondMockMetaPath])
+
+        with self.assertRaises(Exception) as context:
+            projection = create_meta_projection(het_graph, mockMetaPath, False)
+
+        self.assertTrue('The edges of your graph contain an undefined path type.' in str(context.exception))
+
+    def test_undirectedMetaProjection(self):
+        nodes = [Node("MockType1"),Node("MockType1"),Node("MockType2"),Node("MockType3"),Node("MockType1"),Node("MockType2"),Node("MockType3")]
+        edges = [Edge(nodes[0],nodes[2],False,"EdgeType1"), Edge(nodes[1], nodes[3],False,"EdgeType2"),
+                Edge(nodes[2], nodes[3], False, "EdgeType3"),Edge(nodes[5], nodes[3], False, "EdgeType3"),
+                Edge(nodes[4], nodes[5], False, "EdgeType1"),Edge(nodes[5], nodes[6], False, "EdgeType3"),
+                Edge(nodes[4], nodes[6], False, "EdgeType2")]
+
+        edge_type_mappings = [(("MockType1","MockType2"), "EdgeType1"),(("MockType1","MockType3"), "EdgeType2"),(("MockType2","MockType3"), "EdgeType3"),(("MockType2","MockType1"),"EdgeType4"),(("MockType3","MockType2"),"EdgeType5")]
+        mockMetaPath = MetaPath(["EdgeType1", "EdgeType3"], "A mock meta path", "mck")
+        secondMockMetaPath = MetaPath(["EdgeType2","EdgeType1"], "Another, non existend mock meta path", "mck2")
+        paths = HetPaths(edge_type_mappings)
+
+        het_graph = HetGraph(nodes, edges, paths, [mockMetaPath, secondMockMetaPath])
+
+        projection = create_meta_projection(het_graph, mockMetaPath, False)
+
+        self.assertTrue(projection.find_edge(nodes[0], nodes[3]) is not None) # check if edge is defined in projection
+        self.assertTrue(projection.find_edge(nodes[0], nodes[3]).directed is False) # check if projection creation function respects direction argument
+        self.assertTrue(projection.find_edge(nodes[4], nodes[3]) is not None) # check if edge is defined in projection
+        self.assertTrue(projection.find_edge(nodes[4], nodes[3]).directed is False) # check if edge is defined in projection
+        self.assertTrue(projection.find_edge(nodes[4], nodes[6]) is not None) # check if edge is defined in projection
+        self.assertTrue(projection.find_edge(nodes[4], nodes[6]).directed is False) # check if edge is defined in projection
+
+    def test_multigraphMetaProjection(self):
+        nodes = [Node("MockType1"),Node("MockType1"),Node("MockType2"),Node("MockType3"),Node("MockType1"),Node("MockType2"),Node("MockType3")]
+        edges = [Edge(nodes[0],nodes[2],True,"EdgeType1"), Edge(nodes[1], nodes[3],True,"EdgeType2"),
+                Edge(nodes[2], nodes[3], True, "EdgeType3"),Edge(nodes[5], nodes[3], True, "EdgeType3"),
+                Edge(nodes[4], nodes[5], True, "EdgeType1"),Edge(nodes[5], nodes[6], True, "EdgeType3"),
+                Edge(nodes[4], nodes[6], True, "EdgeType2"), Edge(nodes[4], nodes[2], True, "EdgeType1")]
+
+        edge_type_mappings = [(("MockType1","MockType2"), "EdgeType1"),(("MockType1","MockType3"), "EdgeType2"),(("MockType2","MockType3"), "EdgeType3")]
+        mockMetaPath = MetaPath(["EdgeType1", "EdgeType3"], "A mock meta path", "mck")
+        secondMockMetaPath = MetaPath(["EdgeType2","EdgeType1"], "Another, non existend mock meta path", "mck2")
+        paths = HetPaths(edge_type_mappings)
+
+        het_graph = HetGraph(nodes, edges, paths, [mockMetaPath, secondMockMetaPath])
+
+        projection = create_meta_projection(het_graph, mockMetaPath, True, combine_edges=CombineEdgeTypes.SUM)
+
+        self.assertTrue(projection.find_edge(nodes[0], nodes[3]) is not None) # check if edge is defined in projection
+        self.assertTrue(projection.find_edge(nodes[0], nodes[3]).directed is True) # check if projection creation function respects direction argument
+        self.assertTrue(projection.find_edge(nodes[4], nodes[3]) is not None) # check if edge is defined in projection
+        self.assertTrue(projection.find_edge(nodes[4], nodes[6]) is not None) # check if edge is defined in projection
+
+        self.assertTrue(projection.find_edge(nodes[1], nodes[3]) is None) # check if edge is defined in projection
+        self.assertTrue(projection.find_edge(nodes[1], nodes[6]) is None) # check if edge is defined in projection
+        self.assertTrue(projection.find_edge(nodes[0], nodes[2]) is None) # check if edge is defined in projection
+
+        self.assertTrue(projection.find_edge(nodes[4], nodes[3]).attributes["Weight"] is 2) # check weights on edges when edge combining is specified
+        self.assertTrue(projection.find_edge(nodes[0], nodes[3]).attributes["Weight"] is 1) # check weights on edges when edge combining is specified
+        self.assertTrue(projection.find_edge(nodes[4], nodes[6]).attributes["Weight"] is 1) # check weights on edges when edge combining is specified
 
         
