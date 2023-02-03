@@ -63,12 +63,6 @@ rich==13.0.1
 six==1.16.0
 snowballstemmer==2.2.0
 soupsieve==2.3.2.post1
-sphinxcontrib-devhelp==1.0.2
-sphinxcontrib-htmlhelp==2.0.0
-sphinxcontrib-jsmath==1.0.1
-sphinxcontrib-qthelp==1.0.3
-sphinxcontrib-serializinghtml==1.1.5
-sphinxcontrib.applehelp==1.0.3
 texttable==1.6.7
 tinycss2==1.2.1
 tornado==6.2
