@@ -1,12 +1,14 @@
 from .node import Node
 
+from typing import Tuple
+
 class Edge:
     """
     Calss that represents an edge in a heterogeneous information network.
     """
 
 
-    nodes: tuple[Node, Node]
+    nodes: Tuple[Node, Node]
     """An ordered tuple of nodes. First element is the source node and second element the target node."""
     directed: bool
     """Flag whether the edge should be considered as directed or undirected."""
