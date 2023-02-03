@@ -42,7 +42,7 @@ def __check_path_for_metapath(path: List, path_definitions: HetPaths, metapath: 
 
     return actual_edge_types == metapath.path
 
-def __combine_multi_edges(edges: List[Edge], combine_edges: CombineEdgeTypes) -> list[Edge]:
+def __combine_multi_edges(edges: List[Edge], combine_edges: CombineEdgeTypes) -> List[Edge]:
     """
     TODO: Add docstrings
     """
