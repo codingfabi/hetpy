@@ -105,7 +105,7 @@ def create_meta_projection(graph: HetGraph, metapath: MetaPath, directed: bool =
             else:
                 continue
     
-    projection_igraph_nodes = graph.graph.vs[List(set(itertools.chain.from_iterable(projection_edges)))]
+    projection_igraph_nodes = graph.graph.vs[list(set(itertools.chain.from_iterable(projection_edges)))]
     projection_nodes_map = {str(vertex.index) : graph._mapIGraphVertexToNode(vertex) for vertex in projection_igraph_nodes}
     new_projection_edges = [Edge(source=projection_nodes_map[str(t[0])], target=projection_nodes_map[str(t[1])], directed=directed, type=metapath.abbreviation) for t in projection_edges]
 
