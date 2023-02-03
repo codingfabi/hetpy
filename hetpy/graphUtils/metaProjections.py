@@ -10,6 +10,12 @@ from hetpy.models.edge import Edge
 
 from hetpy.exceptions.commonExceptions import GraphDefinitionException
 
+# implement own pairwise function to please python 3.9
+def __pairwise(iterable):
+    a, b = itertools.tee(iterable)
+    next(b, None)
+    return zip(a, b)
+
 
 def __check_path_for_metapath(path: list, path_definitions: HetPaths, metapath: MetaPath) -> bool:
     """
@@ -25,7 +31,7 @@ def __check_path_for_metapath(path: list, path_definitions: HetPaths, metapath: 
             The metapath to which the actual path instance shall be compared
     """
     actual_edge_types = []
-    for t in itertools.pairwise(path):
+    for t in __pairwise(path):
         try:
             defined_edge_type = path_definitions[(t[0]["Type"],t[1]["Type"])]
             actual_edge_types.append(defined_edge_type)
