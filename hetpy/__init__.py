@@ -24,6 +24,7 @@ __version__ = '0.1.1b'
 __author__ = 'Fabian Kneissl'
 __credits__ = 'Database Systems Research Group | Heidelberg University'
 
+# Classes
 from .models.node import Node
 from .models.edge import Edge
 from .models.hetGraph import HetGraph
@@ -31,4 +32,10 @@ from .models.hetPaths import HetPaths, NodeTypeTuple, EdgeTypeMapping
 from .models.metaPath import MetaPath
 
 
+# Util Functions
 from .graphUtils.graphCreationUtils import fromCSV, from_iGraph
+from .graphUtils.metaProjections import create_meta_projection
+
+# Enums
+
+from .enums.projectionEnums import CombineEdgeTypes

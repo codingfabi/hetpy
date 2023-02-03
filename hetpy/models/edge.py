@@ -38,3 +38,11 @@ class Edge:
         self.type = type
 
         self.attributes = attributes
+
+    @property
+    def source(self):
+        return self.nodes[0]
+    
+    @property
+    def target(self):
+        return self.nodes[1]
