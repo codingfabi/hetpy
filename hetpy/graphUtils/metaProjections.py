@@ -114,5 +114,5 @@ def create_meta_projection(graph: HetGraph, metapath: MetaPath, directed: bool =
 
 
     projection_path = ((starting_type, ending_type),metapath.abbreviation)
-    projection_graph = HetGraph(nodes = List(projection_nodes_map.values()), edges = new_projection_edges, path_list = HetPaths([projection_path]))
+    projection_graph = HetGraph(nodes = list(projection_nodes_map.values()), edges = new_projection_edges, path_list = HetPaths([projection_path]))
     return projection_graph
