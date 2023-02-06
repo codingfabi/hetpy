@@ -2,6 +2,8 @@ import igraph as ig
 import itertools
 from collections import Counter
 
+from typing import List
+
 
 from hetpy.enums.projectionEnums import CombineEdgeTypes
 
@@ -17,7 +19,7 @@ def __pairwise(iterable):
     return zip(a, b)
 
 
-def __check_path_for_metapath(path: list, path_definitions: HetPaths, metapath: MetaPath) -> bool:
+def __check_path_for_metapath(path: List, path_definitions: HetPaths, metapath: MetaPath) -> bool:
     """
     Performs a type by type string comparison of a list of nodes quals the list of node types that a meta path constructs.
     
@@ -40,7 +42,7 @@ def __check_path_for_metapath(path: list, path_definitions: HetPaths, metapath: 
 
     return actual_edge_types == metapath.path
 
-def __combine_multi_edges(edges: list[Edge], combine_edges: CombineEdgeTypes) -> list[Edge]:
+def __combine_multi_edges(edges: List[Edge], combine_edges: CombineEdgeTypes) -> List[Edge]:
     """
     TODO: Add docstrings
     """
