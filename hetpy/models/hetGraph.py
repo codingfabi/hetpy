@@ -40,8 +40,8 @@ class HetGraph:
     """A list of meta paths that exist in the graph."""
 
 
-    __nodeIdStore = {}
-    __graphNodeStore = {}
+    __nodeIdStore: dict
+    __graphNodeStore: dict
 
     def __inferEdgeTypes(self) -> None:
         """
@@ -105,6 +105,10 @@ class HetGraph:
             metaPaths : List[MetaPath]
                 A list of semantic meta path definitions on the graph.
         """
+        # initialize instance variables
+        self.__nodeIdStore = {}
+        self.__graphNodeStore = {}
+
         self.nodes = nodes
         self.edges = edges
 
