@@ -61,9 +61,27 @@ class TestClasses(unittest.TestCase):
         paths = HetPaths(edge_type_mappings)
 
         with self.assertRaises(Exception) as context:
-            HetGraph(nodes, edges, paths)
+            graph = HetGraph(nodes, edges, paths)
+            self.assertIsNone(graph)
 
         self.assertTrue("Some defined edge types do not match the defined paths" in str(context.exception))
+
+    def test_shouldNotOverwriteEdgeTypes(self):
+        nodes = [Node("MockType1"),Node("MockType1"),Node("MockType2"),Node("MockType3")]
+        edges = [Edge(nodes[0],nodes[2],False,"EdgeType1"), Edge(nodes[1], nodes[3],False)]
+
+        edge_type_mappings = [(("MockType1","MockType2"), "EdgeType1"),(("MockType1","MockType3"), "EdgeType2")]
+        paths = HetPaths(edge_type_mappings)
+
+        graph = HetGraph(nodes, edges, paths)
+
+        self.assertEqual(graph.edges[0].type,"EdgeType1")
+        self.assertEqual(graph.edges[1].type,"EdgeType2")
+
+        edges[0].type = "WrongEdgeType"
+
+        self.assertEqual(graph.edges[0].type, "EdgeType1")
+
 
     def test_nodeAttributeWrapping(self):
         nodes = [Node("MockType1", {"Name": "Node1"}),Node("MockType1", {"Name" : "Node2"}),Node("MockType2", {"Color": "Red"}),Node("MockType3", {"Name": "Node4"})]
