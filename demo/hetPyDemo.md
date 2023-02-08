@@ -3,10 +3,11 @@
 
 ```python
 from hetpy import HetGraph, Node, Edge, HetPaths, MetaPath
+from hetpy.graphUtils import create_meta_projection
 import matplotlib.pyplot as plt
 import igraph as ig
 import pandas as pd
-
+from copy import deepcopy
 import itertools
 ```
 
@@ -84,20 +85,12 @@ het_graph = HetGraph(nodes, edges, paths)
     Some edge types are undefined. Infering types from paths...
 
 
-
-```python
-print(het_graph.edgeTypes)
-```
-
-    {'wears', 'played_for'}
-
-
 The HetGraph class asserts also automaticall asserts the defined edge types. If they do not match the specified paths, an error is raised during the object creation.
 
 
 ```python
 # assign wrong type to edge
-wrong_edges = edges.copy()
+wrong_edges = deepcopy(edges)
 wrong_edges[0].type = "wears"
 
 HetGraph(nodes, wrong_edges, paths)
@@ -108,33 +101,33 @@ HetGraph(nodes, wrong_edges, paths)
 
     TypeException                             Traceback (most recent call last)
 
-    /Users/I542771/Documents/GitHub/hetpy/demo/hetPyDemo.ipynb Cell 21 in <cell line: 5>()
-          <a href='vscode-notebook-cell:/Users/I542771/Documents/GitHub/hetpy/demo/hetPyDemo.ipynb#X54sZmlsZQ%3D%3D?line=1'>2</a> wrong_edges = edges.copy()
-          <a href='vscode-notebook-cell:/Users/I542771/Documents/GitHub/hetpy/demo/hetPyDemo.ipynb#X54sZmlsZQ%3D%3D?line=2'>3</a> wrong_edges[0].type = "wears"
-    ----> <a href='vscode-notebook-cell:/Users/I542771/Documents/GitHub/hetpy/demo/hetPyDemo.ipynb#X54sZmlsZQ%3D%3D?line=4'>5</a> HetGraph(nodes, wrong_edges, paths)
+    /Users/I542771/Documents/GitHub/hetpy/demo/hetPyDemo.ipynb Cell 20 in <cell line: 5>()
+          <a href='vscode-notebook-cell:/Users/I542771/Documents/GitHub/hetpy/demo/hetPyDemo.ipynb#X25sZmlsZQ%3D%3D?line=1'>2</a> wrong_edges = deepcopy(edges)
+          <a href='vscode-notebook-cell:/Users/I542771/Documents/GitHub/hetpy/demo/hetPyDemo.ipynb#X25sZmlsZQ%3D%3D?line=2'>3</a> wrong_edges[0].type = "wears"
+    ----> <a href='vscode-notebook-cell:/Users/I542771/Documents/GitHub/hetpy/demo/hetPyDemo.ipynb#X25sZmlsZQ%3D%3D?line=4'>5</a> HetGraph(nodes, wrong_edges, paths)
 
 
-    File /opt/homebrew/lib/python3.10/site-packages/hetpy/models/hetGraph.py:80, in HetGraph.__init__(self, nodes, edges, pathList, metaPaths)
-         75     self.__inferEdgeTypes()
-         78 if len(pathList.keys()) > 0:
-         79     # perform assertions
-    ---> 80     self._performTypeAssertions()
-         82 self.nodeTypes = set([node.type for node in nodes])
-         83 self.edgeTypes = set([edge.type for edge in edges])
+    File /opt/homebrew/lib/python3.10/site-packages/hetpy/models/hetGraph.py:127, in HetGraph.__init__(self, nodes, edges, path_list, meta_paths)
+        122     self.__inferEdgeTypes()
+        125 if len(path_list.keys()) > 0:
+        126     # perform assertions
+    --> 127     self._performTypeAssertions()
+        129 self.__setTypes()
+        132 # create igraph instance iteratively
 
 
-    File /opt/homebrew/lib/python3.10/site-packages/hetpy/models/hetGraph.py:58, in HetGraph._performTypeAssertions(self)
-         54 def _performTypeAssertions(self) -> None:
-         55     """
-         56     A wrapper function that performs all type assertions during graph creation.
-         57     """
-    ---> 58     self.__assertEdgeTypes()
+    File /opt/homebrew/lib/python3.10/site-packages/hetpy/models/hetGraph.py:90, in HetGraph._performTypeAssertions(self)
+         86 def _performTypeAssertions(self) -> None:
+         87     """
+         88     A wrapper function that performs all type assertions during graph creation.
+         89     """
+    ---> 90     self.__assertEdgeTypes()
 
 
-    File /opt/homebrew/lib/python3.10/site-packages/hetpy/models/hetGraph.py:52, in HetGraph.__assertEdgeTypes(self)
-         50 defined_type = self.paths[edge.nodes[0].type, edge.nodes[1].type]
-         51 if edge_type is not defined_type:
-    ---> 52     raise TypeException(f"Some defined edge types do not match the defined paths: {edge_type} | {defined_type}! Abborting graph creation.")
+    File /opt/homebrew/lib/python3.10/site-packages/hetpy/models/hetGraph.py:62, in HetGraph.__assertEdgeTypes(self)
+         60 defined_type = self.paths[edge.nodes[0].type, edge.nodes[1].type]
+         61 if edge_type is not defined_type:
+    ---> 62     raise TypeException(f"Some defined edge types do not match the defined paths: {edge_type} | {defined_type}! Abborting graph creation.")
 
 
     TypeException: A type error occured: Some defined edge types do not match the defined paths: wears | played_for! Abborting graph creation.
@@ -152,6 +145,8 @@ color_map = {
     "Club": "pink",
     "Shirt": "white"
 }
+for edge in het_graph.edges:
+    print(vars(edge))
 visual_style = {
     "vertex_label": vertex_labels,
     "vertex_size": 0.3,
@@ -165,9 +160,17 @@ fig, ax = plt.subplots()
 het_graph.plot(type_color_map=color_map, axis=ax, plot_args=visual_style, layout=layout)
 ```
 
+    {'nodes': (<hetpy.models.node.Node object at 0x103725840>, <hetpy.models.node.Node object at 0x13d588550>), 'directed': False, 'type': 'played_for', 'attributes': {}}
+    {'nodes': (<hetpy.models.node.Node object at 0x13d58b430>, <hetpy.models.node.Node object at 0x13d80e590>), 'directed': False, 'type': 'played_for', 'attributes': {}}
+    {'nodes': (<hetpy.models.node.Node object at 0x13d58be20>, <hetpy.models.node.Node object at 0x13d588550>), 'directed': False, 'type': 'played_for', 'attributes': {}}
+    {'nodes': (<hetpy.models.node.Node object at 0x13d58be20>, <hetpy.models.node.Node object at 0x13d80e590>), 'directed': False, 'type': 'played_for', 'attributes': {}}
+    {'nodes': (<hetpy.models.node.Node object at 0x13d80e590>, <hetpy.models.node.Node object at 0x13d58b520>), 'directed': False, 'type': 'wears', 'attributes': {}}
+    {'nodes': (<hetpy.models.node.Node object at 0x13d588550>, <hetpy.models.node.Node object at 0x13d58b6d0>), 'directed': False, 'type': 'wears', 'attributes': {}}
+
+
 
     
-![png](../demo/hetPyDemo_files/hetPyDemo_16_0.png)
+![png](../demo/hetPyDemo_files/hetPyDemo_15_1.png)
     
 
 
@@ -208,7 +211,7 @@ edges = [
 
 
 ```python
-hetGraphWithMetaPaths = HetGraph(nodes, edges, pathList=paths, metaPaths=[hasPlayedInMetaPath])
+hetGraphWithMetaPaths = HetGraph(nodes, edges, path_list=paths, meta_paths=[hasPlayedInMetaPath])
 ```
 
     Some edge types are undefined. Infering types from paths...
@@ -218,7 +221,7 @@ We can check whether the meta path was defined correctly on the graph.
 
 
 ```python
-hetGraphWithMetaPaths.getDefinedMetaPaths()
+hetGraphWithMetaPaths.get_meta_paths()
 ```
 
 
@@ -233,12 +236,12 @@ Also, we can add a meta path in hindsight.
 
 ```python
 reverseMetaPath = MetaPath([paths[('Club','Shirt')], paths[('Player','Club')]], "The shirt color was worn by the player", "wasWornBy")
-hetGraphWithMetaPaths.addMetaPath(reverseMetaPath)
+hetGraphWithMetaPaths.add_meta_path(reverseMetaPath)
 ```
 
 
 ```python
-hetGraphWithMetaPaths.getDefinedMetaPaths()
+hetGraphWithMetaPaths.get_meta_paths()
 ```
 
 
@@ -353,7 +356,7 @@ We specify the type column and the foreign key column as function parameters and
 column_attribute_map = {'Name': 'name'}
 mock_graph = fromCSV('./playClubData.csv','type','links_to',consider_edge_directions=False, node_attribute_column_map=column_attribute_map)
 
-mock_graph.nodeTypes
+mock_graph.node_types
 ```
 
 
@@ -370,14 +373,14 @@ The function also allows to pass arguments directly to the graphs initialization
 edge_type_mappings = [(("Player","Club"),"played_for"), (("Club", "Stadium"),"plays_in"), (('Stadium', 'Club'),"is_owned_by")]
 paths = HetPaths(edge_type_mappings)
 
-has_played_in_meta_path = MetaPath(path=["played_for","wears"], description="The player has played in a certain shirt color", abbreviation="hasPlayedIn")
+has_played_in_meta_path = MetaPath(path=["played_for","plays_in"], description="The player has played in a certain shirt color", abbreviation="hasPlayedIn")
 
 graph_args = {
-    'pathList': paths,
-    'metaPaths': [has_played_in_meta_path]
+    'path_list': paths,
+    'meta_paths': [has_played_in_meta_path]
 }
 
-loaded_graph = fromCSV('./playClubData.csv','type','links_to',consider_edge_directions=False, node_attribute_column_map=column_attribute_map, graphArgs=graph_args)
+loaded_graph = fromCSV('./playClubData.csv','type','links_to',consider_edge_directions=True, node_attribute_column_map=column_attribute_map, graphArgs=graph_args)
 
 loaded_graph.paths
 ```
@@ -397,7 +400,7 @@ loaded_graph.paths
 
 ```python
 type_color_map = {
-    "Player": "black",
+    "Player": "orange",
     "Club": "pink",
     "Stadium": "blue"
 }
@@ -412,6 +415,51 @@ loaded_graph.plot(type_color_map=type_color_map, axis=ax, layout=layout)
 
 
     
-![png](../demo/hetPyDemo_files/hetPyDemo_33_0.png)
+![png](../demo/hetPyDemo_files/hetPyDemo_34_0.png)
     
 
+
+#### Meta Projections
+
+To compress the information a heterogeneous graph contains and focus on a particular node type relation, it is possible to create a projection of the graph on basis of a meta path. Following along the concept of bipartite projections in a bipartite graph, this is called a "meta projection".
+
+A meta projection connects to two nodes if there exists a path that is an instance of the meta path that the projection is based on. Consequently, the meta projection show the relation between the node types of the source and the sink of the meta path. Consequently, if the source and the sink ahve the same type, the resulting projection graph only contains one node type. If the source and sink have different types, the resulting projection is a bipartite graph.
+
+Take for example the following code to create a meta projection based on the already defined meta path "hasPlayedIn". It shows which player has already played in which shirt color.
+
+
+```python
+projection = create_meta_projection(loaded_graph, has_played_in_meta_path)
+
+fig, ax = plt.subplots()
+layout = projection.graph.layout_kamada_kawai()
+projection.plot(type_color_map, axis=ax, layout=layout)
+```
+
+
+    
+![png](../demo/hetPyDemo_files/hetPyDemo_36_0.png)
+    
+
+
+Projections can also be directed if specified.
+
+
+```python
+directed_projection = create_meta_projection(loaded_graph, has_played_in_meta_path, directed=True)
+
+fig, ax = plt.subplots()
+layout = directed_projection.graph.layout_kamada_kawai()
+directed_projection.plot(type_color_map, axis=ax, layout=layout)
+```
+
+
+    
+![png](../demo/hetPyDemo_files/hetPyDemo_38_0.png)
+    
+
+
+
+```python
+
+```
