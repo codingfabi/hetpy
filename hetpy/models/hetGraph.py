@@ -1,4 +1,5 @@
 from typing import List
+from copy import deepcopy
 
 
 from .hetPaths import HetPaths
@@ -55,11 +56,15 @@ class HetGraph:
         """
         Asserts if all defined edge types match with the defined path definitions.
         """
+        flag = True
         for edge in self.edges:
             edge_type = edge.type
             defined_type = self.paths[edge.nodes[0].type, edge.nodes[1].type]
             if edge_type is not defined_type:
+                flag = False
                 raise TypeException(f"Some defined edge types do not match the defined paths: {edge_type} | {defined_type}! Abborting graph creation.")
+                break
+        return flag
 
     def __assertNodeExistence(self, node: Node) -> False:
         """
@@ -87,7 +92,7 @@ class HetGraph:
         """
         A wrapper function that performs all type assertions during graph creation.
         """
-        self.__assertEdgeTypes()
+        return self.__assertEdgeTypes()
 
 
     def __init__(self, nodes: List[Node], edges: List[Edge], path_list: HetPaths = {}, meta_paths: List[MetaPath] = []) -> None:
@@ -109,11 +114,11 @@ class HetGraph:
         self.__nodeIdStore = {}
         self.__graphNodeStore = {}
 
-        self.nodes = nodes
-        self.edges = edges
+        self.nodes = deepcopy(nodes)
+        self.edges = deepcopy(edges)
 
-        self.paths = path_list
-        self.metaPaths = meta_paths
+        self.paths = deepcopy(path_list)
+        self.metaPaths = deepcopy(meta_paths)
 
         # infer edge types if some are not defined
         undefined_edge_types = [edge.type == '' for edge in self.edges]
@@ -124,7 +129,8 @@ class HetGraph:
 
         if len(path_list.keys()) > 0:
             # perform assertions
-            self._performTypeAssertions()
+            if not self._performTypeAssertions():
+                return None
         
         self.__setTypes()
         
