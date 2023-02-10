@@ -236,4 +236,44 @@ class TestUtils(unittest.TestCase):
         projection = create_meta_projection(loaded_graph, has_played_in_meta_path)
         self.assertEqual(len(projection.nodes), 5)
         self.assertEqual(len(projection.edges), 4)
+
+    def test_metaProjectionOnUndefinedPath(self):
+        edge_type_mappings = [(("Player","Club"),"played_for"), (("Club", "Stadium"),"plays_in"), (('Stadium', 'Club'),"is_owned_by")]
+        paths = HetPaths(edge_type_mappings)
+
+        column_attribute_map = {'Name': 'name'}
+        has_played_in_meta_path = MetaPath(path=["played_for","plays_in"], description="The player has played in a certain shirt color", abbreviation="hasPlayedIn")
+
+        graph_args = {
+            'path_list': paths,
+            'meta_paths': [has_played_in_meta_path]
+        }
+        loaded_graph = fromCSV('tests/test_data/simple_csv_test.csv','type','links_to',consider_edge_directions=True, node_attribute_column_map=column_attribute_map, graphArgs=graph_args)
+        new_metapath = MetaPath(path=["plays_in","is_owned_by"], description="An invalid metapath",abbreviation="mockAbrv")
+
+        with self.assertRaises(Exception) as context:
+            projection = create_meta_projection(loaded_graph, new_metapath)
+            self.assertIsNone(projection)
         
+        self.assertTrue("The metapath mockAbrv you are trying to" in str(context.exception))
+    
+    def test_metaProjectionWithoutPathInstance(self):
+        edge_type_mappings = [(("Player","Club"),"played_for"), (("Club", "Stadium"),"plays_in"), (('Stadium', 'Club'),"is_owned_by")]
+        paths = HetPaths(edge_type_mappings)
+
+        column_attribute_map = {'Name': 'name'}
+        has_played_in_meta_path = MetaPath(path=["played_for","plays_in"], description="The player has played in a certain shirt color", abbreviation="hasPlayedIn")
+        new_metapath_without_instance = MetaPath(path=["plays_in","played_for"], description="An invalid metapath",abbreviation="mockAbrv")
+
+        graph_args = {
+            'path_list': paths,
+            'meta_paths': [has_played_in_meta_path,new_metapath_without_instance]
+        }
+        loaded_graph = fromCSV('tests/test_data/simple_csv_test.csv','type','links_to',consider_edge_directions=True, node_attribute_column_map=column_attribute_map, graphArgs=graph_args)
+
+        with self.assertRaises(Exception) as context:
+            projection = create_meta_projection(loaded_graph, new_metapath_without_instance)
+            self.assertIsNone(projection)
+        
+        self.assertTrue("There were no path instances of the specified meta path mockAbrv" in str(context.exception))
+

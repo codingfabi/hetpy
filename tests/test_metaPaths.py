@@ -34,7 +34,7 @@ class TestClasses(unittest.TestCase):
 
         graph = HetGraph(nodes, edges, paths)
         self.assertEqual(graph.get_meta_paths(), {})
-        self.assertEqual(graph.metaPaths, [])
+        self.assertEqual(graph.meta_paths, [])
 
         expected_dict = {
             "mck" : ["EdgeType1","EdgeType3"],
