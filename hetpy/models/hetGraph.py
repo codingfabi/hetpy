@@ -105,9 +105,9 @@ class HetGraph:
                 List of nodes of the graph.
             edges : List[Edge]
                 List of edges of the graph.
-            pathList : HetPaths
+            path_list : HetPaths
                 A dictionary of simple path definitions.
-            metaPaths : List[MetaPath]
+            meta_paths : List[MetaPath]
                 A list of semantic meta path definitions on the graph.
         """
         # initialize instance variables
@@ -118,7 +118,7 @@ class HetGraph:
         self.edges = deepcopy(edges)
 
         self.paths = deepcopy(path_list)
-        self.metaPaths = deepcopy(meta_paths)
+        self.meta_paths = deepcopy(meta_paths)
 
         # infer edge types if some are not defined
         undefined_edge_types = [edge.type == '' for edge in self.edges]
@@ -184,7 +184,7 @@ class HetGraph:
                 Uses the abbreviation as key and the edge type sequence as values.
         """
         graph_dict = {}
-        for metapath in self.metaPaths:
+        for metapath in self.meta_paths:
             graph_dict[metapath.abbreviation] = metapath.path
         return graph_dict
 
@@ -198,7 +198,7 @@ class HetGraph:
                 The meta path that is supposed to be added to the graph.
         """
         if metapath.abbreviation not in self.get_meta_paths().keys():
-            self.metaPaths.append(metapath)
+            self.meta_paths.append(metapath)
         else:
             raise AlreadyDefinedException(f"A metapath with the abbreviaton {metapath.abbreviation}")
 
@@ -212,8 +212,8 @@ class HetGraph:
                 The abbreviation by which the meta path that is supposed to be removed is defined.
         """
         if metapath_abbreviation in self.get_meta_paths().keys():
-            remove_index = [metapath.abbreviation for metapath in self.metaPaths].index(metapath_abbreviation)
-            del self.metaPaths[remove_index]
+            remove_index = [metapath.abbreviation for metapath in self.meta_paths].index(metapath_abbreviation)
+            del self.meta_paths[remove_index]
         else:
             raise NotDefinedException(f"Metapath {metapath_abbreviation}")
 
