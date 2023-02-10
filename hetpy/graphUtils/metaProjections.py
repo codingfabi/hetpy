@@ -10,7 +10,7 @@ from hetpy.enums.projectionEnums import CombineEdgeTypes
 from hetpy.models import MetaPath, HetGraph, HetPaths
 from hetpy.models.edge import Edge
 
-from hetpy.exceptions.commonExceptions import GraphDefinitionException
+from hetpy.exceptions.commonExceptions import GraphDefinitionException, NotDefinedException
 
 # implement own pairwise function to please python 3.9
 def __pairwise(iterable):
@@ -79,6 +79,9 @@ def create_meta_projection(graph: HetGraph, metapath: MetaPath, directed: bool =
         projection : hetpy.HetGraph
     """
 
+    if metapath.path not in [metapath.path for metapath in graph.meta_paths]:
+        raise NotDefinedException(f"The metapath {metapath.path} you are trying to use as a projection is not defined on the graph you are trying to compress.")
+
     starting_type = ''
     ending_type = ''
     for key, object in graph.paths.items():
@@ -89,6 +92,13 @@ def create_meta_projection(graph: HetGraph, metapath: MetaPath, directed: bool =
     
     starting_nodes = graph.get_nodes_of_type(starting_type)
     ending_nodes = graph.get_nodes_of_type(ending_type)
+
+    # error boundry if nodes of type are missing.
+    if len(starting_nodes) == 0:
+        raise NotDefinedException(f"The graph contains no nodes of type {starting_type} that functions as source type of your metapath.")
+    if len(ending_nodes) == 0:
+        raise NotDefinedException(f"The graph contains no nodes of type {ending_type} that functions as sink type of your metapath.")
+
     igraph_starting_nodes = [graph._mapNodeToIGraphVertex(node) for node in starting_nodes]
     igraph_ending_nodes = [graph._mapNodeToIGraphVertex(node) for node in ending_nodes]
     all_paths = {}
@@ -104,6 +114,9 @@ def create_meta_projection(graph: HetGraph, metapath: MetaPath, directed: bool =
                 projection_edges.append((path[0],path[-1]))
             else:
                 continue
+
+    if len(projection_edges) == 0:
+        raise NotDefinedException(f"There were no path instances of the specified meta path {metapath.abbreviation}.")
     
     projection_igraph_nodes = graph.graph.vs[list(set(itertools.chain.from_iterable(projection_edges)))]
     projection_nodes_map = {str(vertex.index) : graph._mapIGraphVertexToNode(vertex) for vertex in projection_igraph_nodes}
