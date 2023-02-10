@@ -1,0 +1,22 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 0.2.1
+title: HetPy
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Fabian
+    family-names: Kneissl
+    email: fabian.kneissl@gmx.de
+    affiliation: >-
+      Heidelberg University - Database Systems Research
+      Group
+repository-code: 'https://github.com/codingfabi/hetpy'
+url: 'https://codingfabi.github.io/hetpy/hetpy.html'
+abstract: >-
+  HetPy is a python graph library that simplifies handling
+  of heterogeneous information networks by strongly typing
+  nodes and edges. 
