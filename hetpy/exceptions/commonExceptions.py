@@ -23,3 +23,4 @@ class GraphDefinitionException(Exception):
     def __init__(self, details):
         # Call the base class constructor with the parameters it needs.
         message =f"ERROR! There was a common error in your graph definition: {details}"
+        super().__init__(message)
