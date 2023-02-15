@@ -44,7 +44,18 @@ def __check_path_for_metapath(path: List, path_definitions: HetPaths, metapath: 
 
 def __combine_multi_edges(edges: List[Edge], combine_edges: CombineEdgeTypes) -> List[Edge]:
     """
-    TODO: Add docstrings
+    Identifies and combines edges that connect the same nodes into a single one. Combination strategies are specified by CombineEdgeTypes enum. 
+    Paramters:
+    -----------
+        edges : List[Edge]
+            The edges of the projection that are supposed to be checked for multi-edges.
+        combine_edges : CombineEdgeTypes
+            The strategy for combining multi-edges.
+    
+    Returns:
+    ----------
+        combined_edges : List[Edge]
+            A new list of edges with the combined edges.
     """
     node_tuples = [(edge.source,edge.target) for edge in edges]
     counter = Counter(node_tuples)
