@@ -2,7 +2,7 @@ from typing import List
 from copy import deepcopy
 
 
-from .hetPaths import HetPaths
+from .hetPaths import EdgeTypeMapping, HetPaths
 from .node import Node
 from .edge import Edge
 from .metaPath import MetaPath
@@ -187,6 +187,48 @@ class HetGraph:
         for metapath in self.meta_paths:
             graph_dict[metapath.abbreviation] = metapath.path
         return graph_dict
+
+    # crud functions
+
+    def add_path(self, path: EdgeTypeMapping) -> None:
+        """
+        Adds a path definition to graph.
+        
+        Parameters:
+        ------------
+            path : EdgeTypeMapping
+                The path definition that is supposed to be added. Consists of a node type tuple and an edge type definition.
+
+        Raises:
+        -----------
+            AlreadyDefinedException: Raised when there is already a path definition for the node types.
+        """
+        if path[0] in self.paths.keys():
+            raise AlreadyDefinedException(f"The graph already contains a path definition for the node types {path[0]}")
+        self.paths[path[0]] = path[1]
+
+    def remove_path(self, path: EdgeTypeMapping) -> None:
+        """
+        Removes a path definitino from the network schema.
+        
+        Parameters:
+            path : EdgeTypeMapping
+                The path definition that is supposed to be removed. Consists of a node type tuple and an edge type definition.
+
+        Raises:
+            NotDefinedException: Raised when there is no path for the specified node types that can be removed.
+
+            AlreadyDefinedException: Raised when the edge type that is defined for the path to be removed does not match the path definition in the paramters.
+        """
+        try:
+            path_definition = self.paths[path[0]]
+            if path_definition == path[1]:
+                del self.paths[path[0]]
+            else:
+                raise AlreadyDefinedException(f"The graph contains a different path definition for the nodes {path[0]}, namely: {path_definition}")
+        except KeyError as e:
+            raise NotDefinedException(f"There is no path definition for the nodes {path[0]}")
+
 
     def add_meta_path(self, metapath: MetaPath) -> None: 
         """
