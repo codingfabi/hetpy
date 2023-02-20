@@ -6,6 +6,7 @@ from hetpy.models import Node, Edge, HetGraph, HetPaths, MetaPath
 import pandas as pd
 import igraph as ig
 from ast import literal_eval
+import json
 
 def fromCSV(filepath: str,type_column: str, connection_column: str, consider_edge_directions = False,  index_column: str = "index", node_attribute_column_map: dict = {}, graphArgs: dict = {} ) -> HetGraph:
     """
@@ -108,3 +109,47 @@ def from_iGraph(graph: ig.Graph, type_attribute: str = "Type", path_list: HetPat
     
     het_graph = HetGraph(nodes, edges, path_list, meta_paths)
     return het_graph
+
+
+def from_json(filepath: str) -> HetGraph:
+    """
+    Creates a graph from existing json structure. Ideally use this with files created via the to_json() function of HetGraph objects.
+
+    Parameters:
+    ------------
+        filepath: str
+            The path to the .json file that is supposed to be loaded.
+    """
+    data = {}
+    with open(filepath) as file:
+        data = json.load(file)
+
+    nodes = []
+    for defined_node in data["nodes"]:
+        node_object = Node(type=defined_node["type"], attributes=defined_node["attributes"])
+        if "id" in defined_node.keys():
+            node_object.id  = defined_node["id"] #overwrite id to preserve defined one
+        nodes.append(node_object)
+
+    edges = []
+    for defined_edge in data["edges"]:
+        source_node = nodes[[node.id for node in nodes].index(defined_edge["source"])]
+        target_node = nodes[[node.id for node in nodes].index(defined_edge["target"])]
+        edge = Edge(source = source_node, target = target_node, directed = defined_edge["directed"], type = defined_edge["type"], attributes = defined_edge["attributes"])
+        edges.append(edge)
+    
+    node_type_mappings = []
+    for path_definition in data["path_definitions"]:
+        node_tuple = (path_definition["node_types"][0],path_definition["node_types"][1])
+        node_type_mappings.append((node_tuple, path_definition["edge_type"]))
+    
+    paths = HetPaths(node_type_mappings)
+
+    meta_paths = []
+    for meta_path_definition in data["meta_path_definitions"]:
+        meta_paths.append(MetaPath(path=meta_path_definition["path"], description=meta_path_definition["description"], abbreviation=meta_path_definition["abbreviation"]))
+
+    return HetGraph(nodes=nodes, edges=edges, path_list = paths, meta_paths=meta_paths)
+
+
+

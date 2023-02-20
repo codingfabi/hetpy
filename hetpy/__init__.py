@@ -35,5 +35,5 @@ from .models.metaPath import MetaPath
 from .enums.projectionEnums import CombineEdgeTypes
 
 # Util Functions
-from .graphUtils.graphCreationUtils import fromCSV, from_iGraph
+from .graphUtils.graphCreationUtils import fromCSV, from_iGraph, from_json
 from .graphUtils.metaProjections import create_meta_projection

@@ -1,6 +1,6 @@
 import unittest
 
-from hetpy import fromCSV, from_iGraph, create_meta_projection
+from hetpy import fromCSV, from_iGraph, create_meta_projection, from_json
 from hetpy.models.hetPaths import HetPaths
 from hetpy.models.metaPath import MetaPath
 from hetpy.models import Node, Edge, HetGraph
@@ -277,3 +277,9 @@ class TestUtils(unittest.TestCase):
         
         self.assertTrue("There were no path instances of the specified meta path mockAbrv" in str(context.exception))
 
+    def test_fromJSON(self):
+        graph = from_json('./tests/test_data/mockGraphExportWithMetaPaths.json')
+        
+        self.assertEqual(len(graph.nodes), 4)
+        self.assertEqual(len(graph.edges), 2)
+        self.assertTrue(graph.nodes[0].attributes["MockAttribute"] == "mockValue")
