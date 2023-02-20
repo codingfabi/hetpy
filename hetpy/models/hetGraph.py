@@ -12,6 +12,7 @@ from hetpy.exceptions.typeExceptions import TypeException
 from hetpy.exceptions.commonExceptions import AlreadyDefinedException, NotDefinedException
 
 import igraph as ig
+import json
 
 
 class HetGraph:
@@ -432,6 +433,58 @@ class HetGraph:
         else:
             raise NotDefinedException(f"Edgetype {type} does not exist in the graph")
         return selected_edges
+
+
+    # util function for graph file storage
+    def export_to_json(self, filepath: str):
+        """
+        Exports the graph to a json file to share or expose.
+
+        Parameters:
+        --------------
+            filepath : str
+                The filepath where the resulting json data shall be stored.
+        """ 
+        edges_json = []
+        for edge in self.edges:
+            edge_dict = {e: getattr(edge, e) for e in dir(edge) if not e.startswith('__') and e != "nodes"}
+            edge_dict["source"] = edge.source.id
+            edge_dict["target"] = edge.target.id
+            edges_json.append(edge_dict)
+
+        nodes_json = []
+        for node in self.nodes:
+            node_dict = {n: getattr(node, n) for n in dir(node) if not n.startswith('__')}
+            nodes_json.append(node_dict)
+
+        path_definitions = []
+        for nodes, path in self.paths.items():
+            path_dict = {
+                "node_types": nodes,
+                "edge_type": path
+            }
+            path_definitions.append(path_dict)
+
+        meta_path_definitions = []
+        for meta_path in self.meta_paths:
+            meta_path_dict = {
+                'path': meta_path.path,
+                'description': meta_path.description,
+                'abbreviation': meta_path.abbreviation
+            }
+            meta_path_definitions.append(meta_path_dict)
+
+        dump_data = {
+            "nodes": nodes_json,
+            "edges": edges_json,
+            "path_definitions": path_definitions,
+            "meta_path_definitions": meta_path_definitions
+        }
+
+        with open(filepath, "w") as f:
+            json.dump(dump_data, f)
+
+    # util functions for plotting
 
     def plot(self, type_color_map: dict, layout = "random", axis = None, plot_args: dict = {}) -> None:
         """
