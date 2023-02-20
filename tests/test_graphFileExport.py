@@ -29,9 +29,9 @@ class TestClasses(unittest.TestCase):
 
     def test_simpleJSONDump(self):
         graph = createSimpleMockHetGraph()
-        graph.export_to_json("./mockGraphExport.json")
+        graph.export_to_json("./tests/test_data/mockGraphExport.json")
 
-        with open('./mockGraphExport.json') as f:
+        with open('./tests/test_data/mockGraphExport.json') as f:
             d = json.load(f)
 
             self.assertEqual(len(d["nodes"]),4)
@@ -41,9 +41,9 @@ class TestClasses(unittest.TestCase):
     def test_JSONDumpWithPaths(self):
         graph = createHetGraphWithPathDefinitions()
 
-        graph.export_to_json("./mockGraphExportWithPaths.json")
+        graph.export_to_json("./tests/test_data/mockGraphExportWithPaths.json")
 
-        with open('./mockGraphExportWithPaths.json') as f:
+        with open('./tests/test_data/mockGraphExportWithPaths.json') as f:
             d = json.load(f)
 
             self.assertEqual(len(d["path_definitions"]),2)
@@ -53,11 +53,13 @@ class TestClasses(unittest.TestCase):
 
         metapath = MetaPath(path=["EdgeType1","EdgeType2"], description="A mock meta path for testing export function.", abbreviation="mockAbbrv")
         
+        graph.nodes[0].attributes = {"MockAttribute": "mockValue"}
+        
         graph.add_meta_path(metapath)
 
-        graph.export_to_json('./mockGraphExportWithMetaPaths.json')
+        graph.export_to_json('./tests/test_data/mockGraphExportWithMetaPaths.json')
 
-        with open('./mockGraphExportWithMetaPaths.json') as f:
+        with open('./tests/test_data/mockGraphExportWithMetaPaths.json') as f:
             d = json.load(f)
 
             self.assertEqual(len(d["meta_path_definitions"]), 1)
