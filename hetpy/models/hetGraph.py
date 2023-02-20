@@ -13,6 +13,7 @@ from hetpy.exceptions.commonExceptions import AlreadyDefinedException, NotDefine
 
 import igraph as ig
 import json
+import difflib
 
 
 class HetGraph:
@@ -61,7 +62,7 @@ class HetGraph:
         for edge in self.edges:
             edge_type = edge.type
             defined_type = self.paths[edge.nodes[0].type, edge.nodes[1].type]
-            if edge_type is not defined_type:
+            if edge_type != defined_type:
                 flag = False
                 raise TypeException(f"Some defined edge types do not match the defined paths: {edge_type} | {defined_type}! Abborting graph creation.")
                 break
@@ -120,7 +121,7 @@ class HetGraph:
 
         self.paths = deepcopy(path_list)
         self.meta_paths = deepcopy(meta_paths)
-
+        
         # infer edge types if some are not defined
         undefined_edge_types = [edge.type == '' for edge in self.edges]
         if any(undefined_edge_types) and len(path_list.keys()) > 0:
