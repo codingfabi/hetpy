@@ -1,0 +1,497 @@
+{
+    "nodes": [
+        {
+            "attributes": {
+                "Type": "User",
+                "Label": "",
+                "ID": "420502434",
+                "iGraphIndex": 0
+            },
+            "id": "acefdb8f-e50f-435c-8e22-5a8206bbddb0",
+            "type": "User"
+        },
+        {
+            "attributes": {
+                "Type": "User",
+                "Label": "",
+                "ID": "38167665",
+                "iGraphIndex": 1
+            },
+            "id": "67020128-457f-49f6-9292-4ae535fd2e0a",
+            "type": "User"
+        },
+        {
+            "attributes": {
+                "Type": "User",
+                "Label": "",
+                "ID": "22692747",
+                "iGraphIndex": 2
+            },
+            "id": "c3c81021-8b5f-4461-bf60-90f2960a07cc",
+            "type": "User"
+        },
+        {
+            "attributes": {
+                "Type": "User",
+                "Label": "",
+                "ID": "2857284126",
+                "iGraphIndex": 3
+            },
+            "id": "3395fa9f-7ce1-4ec3-8c41-92a91f82b4a3",
+            "type": "User"
+        },
+        {
+            "attributes": {
+                "Type": "User",
+                "Label": "",
+                "ID": "24378786",
+                "iGraphIndex": 4
+            },
+            "id": "4b3a458e-cf13-4d1e-9314-f516b0635695",
+            "type": "User"
+        },
+        {
+            "attributes": {
+                "Type": "User",
+                "Label": "",
+                "ID": "520245061",
+                "iGraphIndex": 5
+            },
+            "id": "40fc4d13-4b5b-442c-9780-eb4f73bbbda8",
+            "type": "User"
+        },
+        {
+            "attributes": {
+                "Type": "User",
+                "Label": "",
+                "ID": "909925555",
+                "iGraphIndex": 6
+            },
+            "id": "3101f393-121c-4db0-b941-c2552a4298ec",
+            "type": "User"
+        },
+        {
+            "attributes": {
+                "Type": "Tweet",
+                "Label": "",
+                "ID": "1379703967203098625",
+                "iGraphIndex": 7
+            },
+            "id": "60bd9f44-f6d4-4d48-8cef-f251113828b1",
+            "type": "Tweet"
+        },
+        {
+            "attributes": {
+                "Type": "Tweet",
+                "Label": "",
+                "ID": "1379708117341106176",
+                "iGraphIndex": 8
+            },
+            "id": "57688cbe-dc3f-46f6-acb6-ebd2741836c3",
+            "type": "Tweet"
+        },
+        {
+            "attributes": {
+                "Type": "Tweet",
+                "Label": "",
+                "ID": "1379715636222382080",
+                "iGraphIndex": 9
+            },
+            "id": "de66c185-3bb2-45e7-a142-7df872f8ccb5",
+            "type": "Tweet"
+        },
+        {
+            "attributes": {
+                "Type": "Tweet",
+                "Label": "",
+                "ID": "1379701595336757252",
+                "iGraphIndex": 10
+            },
+            "id": "32dd9b8f-44be-4eff-a8be-764bb2c5c5c7",
+            "type": "Tweet"
+        },
+        {
+            "attributes": {
+                "Type": "Tweet",
+                "Label": "",
+                "ID": "1379699191430184961",
+                "iGraphIndex": 11
+            },
+            "id": "3682296e-c09e-401a-bbc0-b388a8a602cf",
+            "type": "Tweet"
+        },
+        {
+            "attributes": {
+                "Type": "Tweet",
+                "Label": "",
+                "ID": "1379696602579886082",
+                "iGraphIndex": 12
+            },
+            "id": "24164084-d0c8-4b0e-9720-c47ae55301b1",
+            "type": "Tweet"
+        },
+        {
+            "attributes": {
+                "Type": "Tweet",
+                "Label": "",
+                "ID": "1379707459867136001",
+                "iGraphIndex": 13
+            },
+            "id": "8001c30b-d872-423b-a2d0-34f8117ca0a0",
+            "type": "Tweet"
+        },
+        {
+            "attributes": {
+                "Type": "Tweet",
+                "Label": "",
+                "ID": "1379699413984153601",
+                "iGraphIndex": 14
+            },
+            "id": "74cae5b1-bf8a-4f0c-8fd1-f28658bec326",
+            "type": "Tweet"
+        },
+        {
+            "attributes": {
+                "Type": "Tweet",
+                "Label": "",
+                "ID": "1379747819985195011",
+                "iGraphIndex": 15
+            },
+            "id": "d14180d5-343d-4ea9-8278-551b8bc557c4",
+            "type": "Tweet"
+        },
+        {
+            "attributes": {
+                "Type": "Tweet",
+                "Label": "",
+                "ID": "1379958988226318338",
+                "iGraphIndex": 16
+            },
+            "id": "135a9fb7-decf-4c0b-9b5e-7da69ca5d42b",
+            "type": "Tweet"
+        },
+        {
+            "attributes": {
+                "Type": "Tweet",
+                "Label": "",
+                "ID": "1379694007857610753",
+                "iGraphIndex": 17
+            },
+            "id": "6e9a9700-6dee-4c9e-beab-a7fcfbeab3cc",
+            "type": "Tweet"
+        },
+        {
+            "attributes": {
+                "Type": "Tweet",
+                "Label": "",
+                "ID": "1379704740129472512",
+                "iGraphIndex": 18
+            },
+            "id": "f089b51b-8de2-46b2-9556-d593026e9313",
+            "type": "Tweet"
+        },
+        {
+            "attributes": {
+                "Type": "LinkedEntity",
+                "Label": "taz.de",
+                "ID": "420502434",
+                "iGraphIndex": 19
+            },
+            "id": "47c09e92-ac02-43b9-8323-bc58d128e528",
+            "type": "LinkedEntity"
+        },
+        {
+            "attributes": {
+                "Type": "LinkedEntity",
+                "Label": "twitter.com",
+                "ID": "38167665",
+                "iGraphIndex": 20
+            },
+            "id": "b51ba6f0-3d54-4119-a90d-8038eac99a19",
+            "type": "LinkedEntity"
+        }
+    ],
+    "edges": [
+        {
+            "attributes": {
+                "iGraphIndex": 0
+            },
+            "directed": true,
+            "source": "67020128-457f-49f6-9292-4ae535fd2e0a",
+            "target": "6e9a9700-6dee-4c9e-beab-a7fcfbeab3cc",
+            "type": "created"
+        },
+        {
+            "attributes": {
+                "iGraphIndex": 1
+            },
+            "directed": true,
+            "source": "6e9a9700-6dee-4c9e-beab-a7fcfbeab3cc",
+            "target": "47c09e92-ac02-43b9-8323-bc58d128e528",
+            "type": "links to"
+        },
+        {
+            "attributes": {
+                "iGraphIndex": 2
+            },
+            "directed": true,
+            "source": "c3c81021-8b5f-4461-bf60-90f2960a07cc",
+            "target": "24164084-d0c8-4b0e-9720-c47ae55301b1",
+            "type": "created"
+        },
+        {
+            "attributes": {
+                "iGraphIndex": 3
+            },
+            "directed": true,
+            "source": "24164084-d0c8-4b0e-9720-c47ae55301b1",
+            "target": "6e9a9700-6dee-4c9e-beab-a7fcfbeab3cc",
+            "type": "in reply to"
+        },
+        {
+            "attributes": {
+                "iGraphIndex": 4
+            },
+            "directed": true,
+            "source": "acefdb8f-e50f-435c-8e22-5a8206bbddb0",
+            "target": "3682296e-c09e-401a-bbc0-b388a8a602cf",
+            "type": "created"
+        },
+        {
+            "attributes": {
+                "iGraphIndex": 5
+            },
+            "directed": true,
+            "source": "3682296e-c09e-401a-bbc0-b388a8a602cf",
+            "target": "24164084-d0c8-4b0e-9720-c47ae55301b1",
+            "type": "in reply to"
+        },
+        {
+            "attributes": {
+                "iGraphIndex": 6
+            },
+            "directed": true,
+            "source": "c3c81021-8b5f-4461-bf60-90f2960a07cc",
+            "target": "74cae5b1-bf8a-4f0c-8fd1-f28658bec326",
+            "type": "created"
+        },
+        {
+            "attributes": {
+                "iGraphIndex": 7
+            },
+            "directed": true,
+            "source": "74cae5b1-bf8a-4f0c-8fd1-f28658bec326",
+            "target": "3682296e-c09e-401a-bbc0-b388a8a602cf",
+            "type": "in reply to"
+        },
+        {
+            "attributes": {
+                "iGraphIndex": 8
+            },
+            "directed": true,
+            "source": "4b3a458e-cf13-4d1e-9314-f516b0635695",
+            "target": "32dd9b8f-44be-4eff-a8be-764bb2c5c5c7",
+            "type": "created"
+        },
+        {
+            "attributes": {
+                "iGraphIndex": 9
+            },
+            "directed": true,
+            "source": "32dd9b8f-44be-4eff-a8be-764bb2c5c5c7",
+            "target": "3682296e-c09e-401a-bbc0-b388a8a602cf",
+            "type": "in reply to"
+        },
+        {
+            "attributes": {
+                "iGraphIndex": 10
+            },
+            "directed": true,
+            "source": "acefdb8f-e50f-435c-8e22-5a8206bbddb0",
+            "target": "60bd9f44-f6d4-4d48-8cef-f251113828b1",
+            "type": "created"
+        },
+        {
+            "attributes": {
+                "iGraphIndex": 11
+            },
+            "directed": true,
+            "source": "60bd9f44-f6d4-4d48-8cef-f251113828b1",
+            "target": "32dd9b8f-44be-4eff-a8be-764bb2c5c5c7",
+            "type": "in reply to"
+        },
+        {
+            "attributes": {
+                "iGraphIndex": 12
+            },
+            "directed": true,
+            "source": "67020128-457f-49f6-9292-4ae535fd2e0a",
+            "target": "f089b51b-8de2-46b2-9556-d593026e9313",
+            "type": "created"
+        },
+        {
+            "attributes": {
+                "iGraphIndex": 13
+            },
+            "directed": true,
+            "source": "f089b51b-8de2-46b2-9556-d593026e9313",
+            "target": "24164084-d0c8-4b0e-9720-c47ae55301b1",
+            "type": "in reply to"
+        },
+        {
+            "attributes": {
+                "iGraphIndex": 14
+            },
+            "directed": true,
+            "source": "4b3a458e-cf13-4d1e-9314-f516b0635695",
+            "target": "8001c30b-d872-423b-a2d0-34f8117ca0a0",
+            "type": "created"
+        },
+        {
+            "attributes": {
+                "iGraphIndex": 15
+            },
+            "directed": true,
+            "source": "8001c30b-d872-423b-a2d0-34f8117ca0a0",
+            "target": "60bd9f44-f6d4-4d48-8cef-f251113828b1",
+            "type": "in reply to"
+        },
+        {
+            "attributes": {
+                "iGraphIndex": 16
+            },
+            "directed": true,
+            "source": "40fc4d13-4b5b-442c-9780-eb4f73bbbda8",
+            "target": "57688cbe-dc3f-46f6-acb6-ebd2741836c3",
+            "type": "created"
+        },
+        {
+            "attributes": {
+                "iGraphIndex": 17
+            },
+            "directed": true,
+            "source": "57688cbe-dc3f-46f6-acb6-ebd2741836c3",
+            "target": "f089b51b-8de2-46b2-9556-d593026e9313",
+            "type": "in reply to"
+        },
+        {
+            "attributes": {
+                "iGraphIndex": 18
+            },
+            "directed": true,
+            "source": "57688cbe-dc3f-46f6-acb6-ebd2741836c3",
+            "target": "b51ba6f0-3d54-4119-a90d-8038eac99a19",
+            "type": "links to"
+        },
+        {
+            "attributes": {
+                "iGraphIndex": 19
+            },
+            "directed": true,
+            "source": "c3c81021-8b5f-4461-bf60-90f2960a07cc",
+            "target": "de66c185-3bb2-45e7-a142-7df872f8ccb5",
+            "type": "created"
+        },
+        {
+            "attributes": {
+                "iGraphIndex": 20
+            },
+            "directed": true,
+            "source": "de66c185-3bb2-45e7-a142-7df872f8ccb5",
+            "target": "f089b51b-8de2-46b2-9556-d593026e9313",
+            "type": "in reply to"
+        },
+        {
+            "attributes": {
+                "iGraphIndex": 21
+            },
+            "directed": true,
+            "source": "3101f393-121c-4db0-b941-c2552a4298ec",
+            "target": "d14180d5-343d-4ea9-8278-551b8bc557c4",
+            "type": "created"
+        },
+        {
+            "attributes": {
+                "iGraphIndex": 22
+            },
+            "directed": true,
+            "source": "d14180d5-343d-4ea9-8278-551b8bc557c4",
+            "target": "6e9a9700-6dee-4c9e-beab-a7fcfbeab3cc",
+            "type": "in reply to"
+        },
+        {
+            "attributes": {
+                "iGraphIndex": 23
+            },
+            "directed": true,
+            "source": "3395fa9f-7ce1-4ec3-8c41-92a91f82b4a3",
+            "target": "135a9fb7-decf-4c0b-9b5e-7da69ca5d42b",
+            "type": "created"
+        },
+        {
+            "attributes": {
+                "iGraphIndex": 24
+            },
+            "directed": true,
+            "source": "135a9fb7-decf-4c0b-9b5e-7da69ca5d42b",
+            "target": "de66c185-3bb2-45e7-a142-7df872f8ccb5",
+            "type": "in reply to"
+        }
+    ],
+    "path_definitions": [
+        {
+            "node_types": [
+                "Tweet",
+                "Tweet"
+            ],
+            "edge_type": "in reply to"
+        },
+        {
+            "node_types": [
+                "User",
+                "Tweet"
+            ],
+            "edge_type": "created"
+        },
+        {
+            "node_types": [
+                "Tweet",
+                "Hashtag"
+            ],
+            "edge_type": "used in"
+        },
+        {
+            "node_types": [
+                "Tweet",
+                "LinkedEntity"
+            ],
+            "edge_type": "links to"
+        },
+        {
+            "node_types": [
+                "Tweet",
+                "User"
+            ],
+            "edge_type": "was created by"
+        }
+    ],
+    "meta_path_definitions": [
+        {
+            "path": [
+                "created",
+                "in reply to",
+                "was created by"
+            ],
+            "description": "Users interacted with each other by replying",
+            "abbreviation": "uttu"
+        },
+        {
+            "path": [
+                "created",
+                "links to"
+            ],
+            "description": "User used a link in a tweet",
+            "abbreviation": "utl"
+        }
+    ]
+}

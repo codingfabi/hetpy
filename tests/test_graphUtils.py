@@ -5,7 +5,6 @@ from hetpy.models.hetPaths import HetPaths
 from hetpy.models.metaPath import MetaPath
 from hetpy.models import Node, Edge, HetGraph
 
-from hetpy.enums import CombineEdgeTypes
 
 import igraph as ig
 
@@ -30,6 +29,8 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(mockGraph.graph.is_directed(), False)
 
         self.assertEqual(mockGraph.graph.degree(), [1,2,1,4,4,2,2])
+        
+        
     
     def test_createDirectedGraphFromCsv(self):
         column_attribute_map = {"Name": "name"}
@@ -161,10 +162,10 @@ class TestUtils(unittest.TestCase):
 
         het_graph = HetGraph(nodes, edges, paths, [mockMetaPath, secondMockMetaPath])
 
-        with self.assertRaises(Exception) as context:
-            projection = create_meta_projection(het_graph, mockMetaPath, False)
+        projection = create_meta_projection(het_graph, mockMetaPath, False)
 
-        self.assertTrue('The edges of your graph contain an undefined path type.' in str(context.exception))
+        self.assertTrue(len(projection.nodes), 0)
+        self.assertTrue(len(projection.edges), 0)
 
     def test_undirectedMetaProjection(self):
         nodes = [Node("MockType1"),Node("MockType1"),Node("MockType2"),Node("MockType3"),Node("MockType1"),Node("MockType2"),Node("MockType3")]
@@ -203,7 +204,9 @@ class TestUtils(unittest.TestCase):
 
         het_graph = HetGraph(nodes, edges, paths, [mockMetaPath, secondMockMetaPath])
 
-        projection = create_meta_projection(het_graph, mockMetaPath, True, combine_edges=CombineEdgeTypes.SUM)
+        projection = create_meta_projection(het_graph, mockMetaPath, True, combine_edges='sum')
+        
+        self.assertTrue(het_graph.graph.is_directed())
 
         self.assertTrue(projection.find_edge(nodes[0], nodes[3]) is not None) # check if edge is defined in projection
         self.assertTrue(projection.find_edge(nodes[0], nodes[3]).directed is True) # check if projection creation function respects direction argument
@@ -232,7 +235,6 @@ class TestUtils(unittest.TestCase):
         }
 
         loaded_graph = fromCSV('tests/test_data/simple_csv_test.csv','type','links_to',consider_edge_directions=True, node_attribute_column_map=column_attribute_map, graphArgs=graph_args)
-        projection = create_meta_projection(loaded_graph, has_played_in_meta_path)
         projection = create_meta_projection(loaded_graph, has_played_in_meta_path)
         self.assertEqual(len(projection.nodes), 5)
         self.assertEqual(len(projection.edges), 4)
@@ -276,6 +278,14 @@ class TestUtils(unittest.TestCase):
             self.assertIsNone(projection)
         
         self.assertTrue("There were no path instances of the specified meta path mockAbrv" in str(context.exception))
+        
+    def test_metaProjectionWithSymmetricPath(self):
+        graph = from_json('./tests/test_data/mock_conv_graph.json')
+        user_metapath = graph.meta_paths[0]
+        
+        projection = create_meta_projection(graph, user_metapath, directed=True, combine_edges="sum")
+        self.assertTrue(len(projection.edges), 12)
+        self.assertTrue('Weight' in projection.edges[0].attributes.keys())
 
     def test_fromJSON(self):
         graph = from_json('./tests/test_data/mockGraphExportWithMetaPaths.json')

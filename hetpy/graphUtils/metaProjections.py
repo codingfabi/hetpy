@@ -38,8 +38,8 @@ def __check_path_for_metapath(path: List, path_definitions: HetPaths, metapath: 
             defined_edge_type = path_definitions[(t[0]["Type"],t[1]["Type"])]
             actual_edge_types.append(defined_edge_type)
         except KeyError:
-            raise GraphDefinitionException("The edges of your graph contain an undefined path type. This can especially happen in undirected HetGraph objects. Please check your path definitions.")
-
+            print("The edges of your graph contain an undefined path type. This can especially happen in undirected HetGraph objects. Please check your path definitions, you probably did not define the inverse of some path. Skipping this possible path...")
+            continue
     return actual_edge_types == metapath.path
 
 def __combine_multi_edges(edges: List[Edge], combine_edges: CombineEdgeTypes) -> List[Edge]:
@@ -66,7 +66,7 @@ def __combine_multi_edges(edges: List[Edge], combine_edges: CombineEdgeTypes) ->
     for node_tuple, count in counter.items():
         edge = Edge(node_tuple[0],node_tuple[1], type=edge_type, directed=any([edge.directed for edge in edges]))
         attributes = {}
-        if combine_edges is CombineEdgeTypes.SUM:
+        if combine_edges is CombineEdgeTypes.SUM.value:
                 attributes['Weight'] = count
         edge.attributes = attributes
         combined_edges.append(edge)
@@ -104,18 +104,19 @@ def create_meta_projection(graph: HetGraph, metapath: MetaPath, directed: bool =
     starting_nodes = graph.get_nodes_of_type(starting_type)
     ending_nodes = graph.get_nodes_of_type(ending_type)
 
+    undirected_graph_copy = graph.graph.as_undirected()
     igraph_starting_nodes = [graph._mapNodeToIGraphVertex(node) for node in starting_nodes]
     igraph_ending_nodes = [graph._mapNodeToIGraphVertex(node) for node in ending_nodes]
     all_paths = {}
     for node in igraph_starting_nodes:
-        paths_for_node = graph.graph.get_all_simple_paths(node, igraph_ending_nodes)
+        paths_for_node = undirected_graph_copy.get_all_simple_paths(node, igraph_ending_nodes)
         all_paths[str(node.index)] = paths_for_node
     
     projection_edges = []
     for _, paths_of_node in all_paths.items():
         for path in paths_of_node:
-            path_nodes = [graph.graph.vs[index] for index in path]
-            if __check_path_for_metapath(path_nodes, graph.paths, metapath):
+            path_nodes = [undirected_graph_copy.vs[index] for index in path]
+            if len(path_nodes) == (len(metapath.path)+1) and __check_path_for_metapath(path_nodes, graph.paths, metapath):
                 projection_edges.append((path[0],path[-1]))
             else:
                 continue
@@ -123,11 +124,11 @@ def create_meta_projection(graph: HetGraph, metapath: MetaPath, directed: bool =
     if len(projection_edges) == 0:
         raise NotDefinedException(f"There were no path instances of the specified meta path {metapath.abbreviation}.")
     
-    projection_igraph_nodes = graph.graph.vs[list(set(itertools.chain.from_iterable(projection_edges)))]
+    projection_igraph_nodes = undirected_graph_copy.vs[list(set(itertools.chain.from_iterable(projection_edges)))]
     projection_nodes_map = {str(vertex.index) : graph._mapIGraphVertexToNode(vertex) for vertex in projection_igraph_nodes}
     new_projection_edges = [Edge(source=projection_nodes_map[str(t[0])], target=projection_nodes_map[str(t[1])], directed=directed, type=metapath.abbreviation) for t in projection_edges]
 
-    if combine_edges is not CombineEdgeTypes.NONE:
+    if combine_edges is not CombineEdgeTypes.NONE.value:
         new_projection_edges = __combine_multi_edges(new_projection_edges, combine_edges)
 
 

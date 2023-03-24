@@ -13,3 +13,4 @@ dist/
 # test results
 /tests/test_data/*
 !/tests/test_data/mockGraphExportWithMetaPaths.json
+!/tests/test_data/mock_conv_graph.json
