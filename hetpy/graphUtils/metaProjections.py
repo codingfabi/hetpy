@@ -109,7 +109,7 @@ def create_meta_projection(graph: HetGraph, metapath: MetaPath, directed: bool =
     igraph_ending_nodes = [graph._mapNodeToIGraphVertex(node) for node in ending_nodes]
     all_paths = {}
     for node in igraph_starting_nodes:
-        paths_for_node = undirected_graph_copy.get_all_simple_paths(node, igraph_ending_nodes)
+        paths_for_node = undirected_graph_copy.get_all_simple_paths(node, igraph_ending_nodes, cutoff=len(metapath.path))
         all_paths[str(node.index)] = paths_for_node
     
     projection_edges = []
