@@ -8,6 +8,21 @@ import igraph as ig
 from ast import literal_eval
 import json
 
+import datetime
+
+def __from_json_object_map(json_dict):
+    """
+    mapping function used to convert stringify dates back into datetime objects on json load.
+    """
+    for key, value in json_dict.items():
+        if isinstance(value, str):
+            try:
+                json_dict[key] = datetime.datetime.fromisoformat(value)
+            except ValueError:
+                pass
+    return json_dict
+
+
 def fromCSV(filepath: str,type_column: str, connection_column: str, consider_edge_directions = False,  index_column: str = "index", node_attribute_column_map: dict = {}, graphArgs: dict = {} ) -> HetGraph:
     """
     Returns a heterogeneous graph object mapped from a csv file. Consideres every row to be a node.
@@ -122,7 +137,7 @@ def from_json(filepath: str) -> HetGraph:
     """
     data = {}
     with open(filepath) as file:
-        data = json.load(file)
+        data = json.load(file, object_hook=__from_json_object_map)
 
     nodes = []
     for defined_node in data["nodes"]:
