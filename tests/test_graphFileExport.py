@@ -1,5 +1,6 @@
 import unittest
 import json
+import datetime
 
 from hetpy import Node, Edge, HetGraph, HetPaths, MetaPath
 
@@ -63,6 +64,17 @@ class TestClasses(unittest.TestCase):
             d = json.load(f)
 
             self.assertEqual(len(d["meta_path_definitions"]), 1)
+    
+    def test_JSONDumpWithDates(self):
+        graph = createHetGraphWithPathDefinitions()
+        graph.add_path((("MockType2","MockType3"),"EdgeTypeWithTimestamp"))
+        edge_with_timestamp = Edge(graph.get_nodes_of_type("MockType2")[0],graph.get_nodes_of_type("MockType3")[0], True, "EdgeTypeWithTimestamp",{"time": datetime.datetime.now()})
+        node_with_timestamp = Node("MockType4", {"timestamp": datetime.datetime.now()})
+        graph.add_node(node_with_timestamp)
+        graph.add_edge(edge_with_timestamp)
+        
+        graph.export_to_json('./tests/test_data/mockGraphExportWithDates.json')
+        
 
 
 

@@ -5,6 +5,8 @@ from hetpy.models.hetPaths import HetPaths
 from hetpy.models.metaPath import MetaPath
 from hetpy.models import Node, Edge, HetGraph
 
+import datetime
+
 
 import igraph as ig
 
@@ -293,3 +295,11 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(len(graph.nodes), 4)
         self.assertEqual(len(graph.edges), 2)
         self.assertTrue(graph.nodes[0].attributes["MockAttribute"] == "mockValue")
+        
+    def test_fromJSONWithDate(self):
+        graph = from_json('./tests/test_data/mockGraphExportWithDates.json')
+        edges = graph.get_edges_of_type('EdgeTypeWithTimestamp')
+        self.assertTrue(type(edges[0].attributes["time"]) == datetime.datetime)
+        nodes = graph.get_nodes_of_type("MockType4")
+        print(type(nodes[0].attributes["timestamp"]) == datetime.datetime)
+        

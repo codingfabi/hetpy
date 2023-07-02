@@ -15,6 +15,7 @@ import igraph as ig
 import json
 import difflib
 
+from datetime import datetime, date
 
 class HetGraph:
     """
@@ -45,6 +46,15 @@ class HetGraph:
 
     __nodeIdStore: dict
     __graphNodeStore: dict
+    
+    
+    def __json_serializer(self, obj):
+        """
+        Helper function to serialize non-serializable objects for json export. 
+        """
+        if isinstance(obj, (datetime, date)):
+            return obj.isoformat()
+        raise TypeError ("Type %s not serializable" % type(obj))
 
     def __inferEdgeTypes(self) -> None:
         """
@@ -483,7 +493,7 @@ class HetGraph:
         }
 
         with open(filepath, "w") as f:
-            json.dump(dump_data, f)
+            json.dump(dump_data, f, sort_keys=True, default=self.__json_serializer)
 
     # util functions for plotting
 
