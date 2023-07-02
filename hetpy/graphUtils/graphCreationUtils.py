@@ -93,35 +93,12 @@ def from_iGraph(graph: ig.Graph, type_attribute: str = "Type", path_list: HetPat
         NotDefinedException
             Raised when the specified type_attribute is undefined in the nodes or edges of the iGraph object.
     """
-    nodes = []
-    edges = []
-    for vertex in graph.vs:
-        attribute_names = vertex.attribute_names()
-        if type_attribute not in attribute_names:
-           raise NotDefinedException(f"type_attribute {type_attribute} in iGraph node attributes")
-        values = [vertex[name] for name in attribute_names]
-
-        attributes = zip(attribute_names, values)
-        attribute_dict = {tuple[0] : tuple[1] for tuple in attributes}
-        attribute_dict["iGraphIndex"] = vertex.index
-        nodes.append(Node(vertex[type_attribute], attributes=attribute_dict))
-    
-    nodes_by_original_index = [node.attributes["iGraphIndex"] for node in nodes]
-    for edge in graph.es:
-        attribute_names = edge.attribute_names()
-        edge_type = ''
-        if type_attribute in attribute_names:
-            edge_type = edge[type_attribute]
-        values = [edge[name] for name in attribute_names]
-
-        attributes = zip(attribute_names, values)
-        attribute_dict = {tuple[0] : tuple[1] for tuple in attributes}
-        attribute_dict["iGraphIndex"] = edge.index
-        source_node = nodes[nodes_by_original_index.index(edge.source)]
-        target_node = nodes[nodes_by_original_index.index(edge.target)]
-        edge = Edge(source_node, target_node, directed=graph.is_directed(), type=edge_type, attributes=attribute_dict)
-        edges.append(edge)
-    
+    attribute_names = graph.vs.attribute_names()
+    if type_attribute not in attribute_names:
+        raise Exception(f"type_attribute {type_attribute} in iGraph node attributes")
+    nodes = [Node(vertex[type_attribute], attributes={**{name: vertex[name] for name in attribute_names}, "iGraphIndex": vertex.index}) for vertex in graph.vs]
+    #nodes_by_original_index = {node.attributes["iGraphIndex"]: node for node in nodes}
+    edges = [Edge(nodes[edge.source], nodes[edge.target], directed=graph.is_directed(), type=edge[type_attribute] if type_attribute in edge.attribute_names() else '', attributes={**{name: edge[name] for name in edge.attribute_names()}, "iGraphIndex": edge.index}) for edge in graph.es]
     het_graph = HetGraph(nodes, edges, path_list, meta_paths)
     return het_graph
 
