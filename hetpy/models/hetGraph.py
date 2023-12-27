@@ -456,11 +456,16 @@ class HetGraph:
             filepath : str
                 The filepath where the resulting json data shall be stored.
         """ 
+        layout = self.graph.layout(layout='auto')
         edges_json = []
-        for edge in self.edges:
+        for index, edge in enumerate(self.edges):
             edge_dict = {e: getattr(edge, e) for e in dir(edge) if not e.startswith('__') and e != "nodes"}
             edge_dict["source"] = edge.source.id
             edge_dict["target"] = edge.target.id
+            edge_dict["position"] = {
+                "x": layout.coords[index][0],
+                "y": layout.coords[index][0]
+            }
             edges_json.append(edge_dict)
 
         nodes_json = []
