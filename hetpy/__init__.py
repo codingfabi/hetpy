@@ -20,7 +20,7 @@ You can then use the provided modules, classes and functions for your network sc
 
 
 
-__version__ = '1.0.3a'
+__version__ = '1.0.4'
 __author__ = 'Fabian Kneissl'
 __credits__ = 'Database Systems Research Group | Heidelberg University'
 
