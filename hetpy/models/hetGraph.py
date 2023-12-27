@@ -460,19 +460,19 @@ class HetGraph:
         """ 
         layout = self.graph.layout(layout=layout_function)
         edges_json = []
-        for index, edge in enumerate(self.edges):
+        for edge in self.edges:
             edge_dict = {e: getattr(edge, e) for e in dir(edge) if not e.startswith('__') and e != "nodes"}
             edge_dict["source"] = edge.source.id
             edge_dict["target"] = edge.target.id
-            edge_dict["position"] = {
-                "x": layout.coords[index][0],
-                "y": layout.coords[index][0]
-            }
             edges_json.append(edge_dict)
 
         nodes_json = []
-        for node in self.nodes:
+        for index, node in enumerate(self.nodes):
             node_dict = {n: getattr(node, n) for n in dir(node) if not n.startswith('__')}
+            node_dict["position"] = {
+                "x": layout.coords[index][0],
+                "y": layout.coords[index][0]
+            }
             nodes_json.append(node_dict)
 
         path_definitions = []
