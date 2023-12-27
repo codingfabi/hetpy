@@ -471,7 +471,7 @@ class HetGraph:
             node_dict = {n: getattr(node, n) for n in dir(node) if not n.startswith('__')}
             node_dict["position"] = {
                 "x": layout.coords[index][0],
-                "y": layout.coords[index][0]
+                "y": layout.coords[index][1]
             }
             nodes_json.append(node_dict)
 
